@@ -7,6 +7,8 @@
 #include "Outputs/OutputList/OutputList.h"
 #include "Config/Config.h"
 #include "Debugging/Errors/ErrorMessages.h"
+#include "Driving/drivingControl/DrivingControl.h"
+
 
 // Used to get acces to all the parts of the library from anywhere in the programm.
 // It has instances of all the different main parts of the library.
@@ -21,6 +23,8 @@ private:
 	Config config;
 
 	ErrorMessages errorMessages;
+
+	DrivingControl drivingControl;
 public:
 	SensorList& getSensorList();
 	SensorManager& getSensorManager();
@@ -32,6 +36,7 @@ public:
 
 	ErrorMessages& getErrorMessage();
 
+	DrivingControl& getDrivingControl();
 	Application();
 };
 	

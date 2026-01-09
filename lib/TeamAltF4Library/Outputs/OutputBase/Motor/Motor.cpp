@@ -8,7 +8,17 @@ Motor::Motor(int inA, int inB, int pwm, String n) : OutputBase(n), pinInA(inA), 
     pinMode(pinPwm, OUTPUT);
 }
 
-void Motor::turnOn(int speed, int direction) {
+void Motor::turnOn(float speed) {
+    int direction;
+
+    if(speed < 0) {
+        direction = Config::BACKWARDS;
+        speed = speed * -1;
+    }
+    else {
+        direction = Config::FORWARDS;
+    }
+    
     if (direction == Config::FORWARDS) {
         digitalWrite(pinInA, HIGH);
         digitalWrite(pinInB, LOW);
@@ -17,7 +27,7 @@ void Motor::turnOn(int speed, int direction) {
         digitalWrite(pinInA, LOW);
         digitalWrite(pinInB, HIGH);
     }
-    int calculatedSpeed = 256 * (speed / 100.0);  
+    int calculatedSpeed = (int)(speed * 255.0f + 0.5f);
     analogWrite(pinPwm, calculatedSpeed);
 } 
 

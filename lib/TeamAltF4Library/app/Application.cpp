@@ -1,7 +1,7 @@
 #include "Application.h"
 
 Application::Application() : sensorManager(this), sensorList(this), 
-	outputManager(this), outputList(this), errorMessages(this) {} 
+	outputManager(this), outputList(this), errorMessages(this), drivingControl(this) {} 
 
 SensorList& Application::getSensorList() {
 	return sensorList;
@@ -27,4 +27,6 @@ ErrorMessages& Application::getErrorMessage() {
 	return errorMessages;
 }
 
-
+DrivingControl& Application::getDrivingControl() {
+	return drivingControl;
+}

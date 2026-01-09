@@ -60,13 +60,28 @@ void setup() {
 
 	digitalWrite(LED_BUILTIN, LOW);
 
-	app.getOutputManager().createMotor(32, 33, 11, "frontLeft");
-	app.getOutputManager().getMotorByName("frontLeft")->turnOn(50, Config::FORWARDS);
-	delay(500);
-	app.getOutputManager().getMotorByName("frontLeft")->turnOn(50, Config::BACKWARDS);
+	app.getOutputManager().createMotor(21, 22, 10, "frontLeft");
+	app.getOutputManager().createMotor(32, 33, 11, "back");
+	app.getOutputManager().createMotor(36, 38, 12, "frontRight");
+	
+	
+	Motor* motor1 = app.getOutputManager().getMotorByName("frontLeft");
+	Motor* motor2 = app.getOutputManager().getMotorByName("back");
+	Motor* motor3 = app.getOutputManager().getMotorByName("frontRight");
+	app.getDrivingControl().addMotor(1, motor1);
+	app.getDrivingControl().addMotor(2, motor2);
+	app.getDrivingControl().addMotor(3, motor3);
+	
 
-	// Motor frontLeft(32, 33, 11, "frontLeft");
-	// frontLeft.turnOn(100, Config::FORWARDS);
+	
+	
+	app.getDrivingControl().drive(-90, 0.4, 0);
+	delay(500);
+	app.getDrivingControl().drive(-90, 0.2, 0);
+
+
+	
+
 }
 
 unsigned long rane = 2;

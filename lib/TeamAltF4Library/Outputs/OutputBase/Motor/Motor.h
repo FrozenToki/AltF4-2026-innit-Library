@@ -10,7 +10,7 @@ private:
     int pinPwm;
 public: 
     Motor(int inA, int inB, int pwm, String n);
-    void turnOn(int speed, int direction);
+    void turnOn(float speed);
     void turnOff();
 };
 
