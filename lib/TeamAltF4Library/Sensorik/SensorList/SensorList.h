@@ -19,4 +19,6 @@ public:
 	static SensorBase* getSensorByName(const String& n);
 	static SensorBase* get(int index);
 	static int getSensorCount();
+
+	void updateAllSensors();
 };

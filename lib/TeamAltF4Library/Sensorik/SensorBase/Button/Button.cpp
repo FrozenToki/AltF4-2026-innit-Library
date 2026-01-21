@@ -2,7 +2,7 @@
 
 Button::Button(int p, String n) : SensorBase(p, n) {
 	type = BUTTON;
-	pinMode(pin, INPUT_PULLDOWN);  
+	pinMode(pin, INPUT_PULLUP);  
 }
 
 void Button::update() {

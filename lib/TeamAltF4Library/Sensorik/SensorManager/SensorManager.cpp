@@ -3,13 +3,9 @@
 
 SensorManager::SensorManager(Application* a) : app(a) {}
 
-std::vector<Button> buttonStorage[10];
-int buttonCount = 0;
-
 
 void SensorManager::createButton(int p, String n) {
-	Button* btn = &buttonStorage[buttonCount++];
-	*btn = Button(p, n);
+	Button* btn = new Button(p, n);
 	app->getSensorList().addSensor(btn);
 }
 

@@ -11,8 +11,6 @@ class SensorManager {
 private:
 	Application* app;
 
-	std::vector<Button> buttonStorage;
-	int buttonCount;
 public:
 	SensorManager(Application* a);
 

@@ -8,6 +8,7 @@
 #include "Config/Config.h"
 #include "Debugging/Errors/ErrorMessages.h"
 #include "Driving/drivingControl/DrivingControl.h"
+#include "Serial/SerialComm.h"
 
 
 // Used to get acces to all the parts of the library from anywhere in the programm.
@@ -25,6 +26,8 @@ private:
 	ErrorMessages errorMessages;
 
 	DrivingControl drivingControl;
+
+	SerialComm serialComm;
 public:
 	SensorList& getSensorList();
 	SensorManager& getSensorManager();
@@ -37,6 +40,9 @@ public:
 	ErrorMessages& getErrorMessage();
 
 	DrivingControl& getDrivingControl();
+
+	SerialComm& getSerialComm();
+
 	Application();
 };
 	

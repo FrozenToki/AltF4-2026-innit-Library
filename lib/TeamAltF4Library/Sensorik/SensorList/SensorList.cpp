@@ -27,3 +27,9 @@ SensorBase* SensorList::getSensorByName(const String& n) {
 	}
 	return nullptr;
 }
+
+void SensorList::updateAllSensors() {
+	for (int i = 0; i < sensorCount; i++) {
+		sensorList[i]->update();
+	}
+}
