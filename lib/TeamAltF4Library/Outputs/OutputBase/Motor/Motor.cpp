@@ -20,12 +20,12 @@ void Motor::turnOn(float speed) {
     }
     
     if (direction == Config::FORWARDS) {
-        digitalWrite(pinInA, HIGH);
-        digitalWrite(pinInB, LOW);
+        digitalWrite(pinInB, HIGH);
+        digitalWrite(pinInA, LOW);
     } 
     else if (direction == Config::BACKWARDS) {
-        digitalWrite(pinInA, LOW);
-        digitalWrite(pinInB, HIGH);
+        digitalWrite(pinInB, LOW);
+        digitalWrite(pinInA, HIGH);
     }
     int calculatedSpeed = (int)(speed * 255.0f + 0.5f);
     analogWrite(pinPwm, calculatedSpeed);
