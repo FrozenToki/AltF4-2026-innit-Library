@@ -2,7 +2,7 @@
 
 Application::Application() : sensorManager(this), sensorList(this), 
 	outputManager(this), outputList(this), errorMessages(this), drivingControl(this),
-	serialComm(this) {} 
+	serialComm(this), rotationControl(this) {} 
 
 SensorList& Application::getSensorList() {
 	return sensorList;
@@ -34,4 +34,8 @@ DrivingControl& Application::getDrivingControl() {
 
 SerialComm& Application::getSerialComm() {
 	return serialComm;
+}
+
+RotationControl& Application::getRotationControl() {
+	return rotationControl;
 }

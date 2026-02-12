@@ -3,18 +3,11 @@
 #include "Sensorik/SensorBase/SensorBase.h"
 #include "Config/Config.h"
 #include "Outputs/OutputBase/Motor/Motor.h"
-#include<bits/stdc++.h>
-//#include <Adafruit_Sensor.h>
-
-//#include <Adafruit_BNO055.h>
-//#include <utility/imumaths.h>
-//#include <Wire.h>
-
-//Adafruit_BNO055 bno = Adafruit_BNO055(55);
+#include "Sensorik/SensorBase/Bno055/Bno055.h"
 
 Application app;
 
-
+Bno055* bno;
 float hellig;
 String Nachricht = "";
 
@@ -37,6 +30,7 @@ void startSerialConnection(bool fastBaudRate, bool waitForConnection) {
 		#endif
 	}
 	delay(200);
+	Serial.println("Connection established");
 }
 
 Motor* motor1;
@@ -46,22 +40,16 @@ Motor* motor3;
 void setup() {
 	pinMode(LED_BUILTIN, OUTPUT);
 	digitalWrite(LED_BUILTIN, HIGH);
-	//sstartSerialConnection(true,true);
-
-	digitalWrite(LED_BUILTIN, LOW);
-
-	pinMode(9, INPUT);
+	//startSerialConnection(true,true);
 	
-
-	//bno.begin();
-	//bno.setExtCrystalUse(true);
-
+	//digitalWrite(LED_BUILTIN, LOW);
+	
+	
 	
 
 	app.getOutputManager().createMotor(21, 20, 10, "frontLeft");
 	app.getOutputManager().createMotor(32, 33, 11, "back");
 	app.getOutputManager().createMotor(36, 38, 12, "frontRight");
-	
 	
 	motor1 = app.getOutputManager().getMotorByName("frontLeft");
 	motor2 = app.getOutputManager().getMotorByName("back");
@@ -74,6 +62,7 @@ void setup() {
 	Serial3.begin(115200);
 
 	pinMode(9, INPUT_PULLDOWN);
+	bno = app.getSensorManager().getBno055ByName("GyroSensor1"); 
 }
 
 float degree = 0;
@@ -84,9 +73,14 @@ void loop() {
 		//Serial.println(Serial3.readStringUntil('\n'));
 		String input = Serial3.readStringUntil('\n');
 		degree = input.toFloat();
+		while (degree > 180) degree -= 360;
+		while (degree < -180) degree += 360;	
 	}
 	if(digitalRead(9)== HIGH) {
-		app.getDrivingControl().drive(degree, 1, 0);
+		bno->update();
+		app.getDrivingControl().drive(0, 0 , app.getRotationControl().getRotation(0));
+		//Serial.println(bno->rawData());
+		//Serial.println(app.getRotationControl().getRotation());
 	} 
 	else {
 		motor1->turnOff();
@@ -94,10 +88,7 @@ void loop() {
 		motor3->turnOff();
 	}
 
-	//sensors_event_t event; 
-	//bno.getEvent(&event);
-
-	//Serial.println(event.orientation.x);
 	//delay(100);
+
 }
 

@@ -17,6 +17,27 @@ void DrivingControl::drive(float angle, float motorSpeed, float rotation) {
     float motor1 = cos(angleMotor1) * speedX + sin(angleMotor1) * speedY + rotation;
     float motor2 = cos(angleMotor2) * speedX + sin(angleMotor2) * speedY + rotation;
     float motor3 = cos(angleMotor3) * speedX + sin(angleMotor3) * speedY + rotation;
+
+		if (motor1 < -1.0f) {
+			motor1 = -1.0f;
+		}
+		else if (motor1 > 1.0f) {
+			motor1 = 1.0f;
+		}
+
+		if (motor2 < -1.0f) {
+			motor2 = -1.0f;
+		}
+		else if (motor2 > 1.0f) {
+			motor2 = 1.0f;
+		}
+
+		if (motor3 < -1.0f) {
+			motor3 = -1.0f;
+		}
+		else if (motor3 > 1.0f) {
+			motor3 = 1.0f;
+		}
     
     frontLeft->turnOn(motor1);
     back->turnOn(motor2);

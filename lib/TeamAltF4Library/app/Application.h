@@ -9,7 +9,7 @@
 #include "Debugging/Errors/ErrorMessages.h"
 #include "Driving/drivingControl/DrivingControl.h"
 #include "Serial/SerialComm.h"
-
+#include "Driving/rotationControl/RotationControl.h"
 
 // Used to get acces to all the parts of the library from anywhere in the programm.
 // It has instances of all the different main parts of the library.
@@ -28,6 +28,8 @@ private:
 	DrivingControl drivingControl;
 
 	SerialComm serialComm;
+
+	RotationControl rotationControl;
 public:
 	SensorList& getSensorList();
 	SensorManager& getSensorManager();
@@ -42,6 +44,8 @@ public:
 	DrivingControl& getDrivingControl();
 
 	SerialComm& getSerialComm();
+
+	RotationControl& getRotationControl();
 
 	Application();
 };

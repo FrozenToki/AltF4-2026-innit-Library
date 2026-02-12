@@ -14,6 +14,8 @@ public:
 	SensorBase(int p,String n);
 
   static String BUTTON;
+	static String BNO055;
+
 
 	int getPin() const;
 	String getName() const;

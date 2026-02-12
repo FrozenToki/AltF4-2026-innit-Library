@@ -3,6 +3,7 @@
 SensorBase::SensorBase(int p, String n) : pin(p), value(0.0f), name(n) {}
 
 String SensorBase::BUTTON = "Btn";
+String SensorBase::BNO055 = "Gyro";
 
 float SensorBase::readSensor() {
 	this->update();
