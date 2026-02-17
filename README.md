@@ -1,3 +1,8 @@
+![Competition](https://img.shields.io/badge/Competition-1v1%20Lightweight-blue)
+![Team](https://img.shields.io/badge/Team-Alt+F4-black)
+![Controller](https://img.shields.io/badge/Main%20Controller-Teensy%204.1-orange)
+
+
 # 🤖 Team Alt+F4 – RoboCup Soccer Lightweight
 
 Welcome to the official repository of **Team Alt+F4**.
