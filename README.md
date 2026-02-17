@@ -1,118 +1,68 @@
-# 🤖 RoboCup Soccer 1v1 Robot
+# 🤖 Team Alt+F4 – RoboCup Soccer Lightweight
 
-![RoboCup](https://img.shields.io/badge/Competition-RoboCup%20Junior-blue)
-![Status](https://img.shields.io/badge/Status-Active-success)
-![Platform](https://img.shields.io/badge/Microcontroller-RP2040-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
+Welcome to the official repository of **Team Alt+F4**.
+
+We compete in **RoboCup Junior Soccer – 1v1 Lightweight** and develop our own autonomous soccer robot.
 
 ---
 
-## 🚀 Overview
+## ⚽ About the Project
 
-This repository contains the development of our autonomous RoboCup Junior Soccer 1v1 robot.
+Our robot is designed to:
 
-The robot is designed to:
-
-- ⚽ Detect and track the infrared soccer ball  
-- 🧭 Maintain orientation using an IMU  
-- 🛑 Detect boundaries and avoid leaving the field  
-- 🎯 Play strategically in competitive matches  
-- 📡 Communicate via Bluetooth for debugging  
+- Detect and track the infrared ball  
+- Stay oriented using an IMU  
+- Move fast and stable during matches  
+- Compete in 1v1 lightweight games  
 
 ---
 
 ## 🛠 Hardware
 
-### Main Components
+Main components used in our robot:
 
-- **Microcontroller:** RP2040 Zero  
-- **IR Sensors:** 16x TSSP58038 (360° ball detection)  
-- **IMU:** BNO055  
-- **Motor Driver:** Pololu Motor Controller  
-- **Motors:** 12V 25Dx48L HP Metal Gearmotors  
-- **Custom 2-layer PCB design**
+- **Main Controller:** Teensy 4.1  
+- Infrared ball sensors (360° detection)  
+- IMU (for orientation)  
+- Motor driver  
+- 12V DC gear motors  
+- Custom PCB  
 
 ---
 
 ## 💻 Software
 
-- **Language:** C++ (Arduino Framework)  
-- **Environment:** PlatformIO  
-- **Architecture:** Modular sensor & motor control system  
-- **Communication:** Bluetooth debugging interface  
-- **Control System:** Gyro stabilization + dynamic speed control  
+- Language: C++ (Arduino framework)  
+- Developed with PlatformIO  
+- Modular code structure  
+- Custom motor control system  
 
 ---
 
 ## 📂 Project Structure
 
 ```
-.
-├── src/        # Main robot code
-├── lib/        # Custom libraries
-├── hardware/   # PCB files & schematics
-├── docs/       # Documentation & strategies
-└── README.md
+src/        # Main robot code  
+lib/        # Custom libraries  
+hardware/   # PCB files  
+docs/       # Documentation  
 ```
 
 ---
 
-## 🧠 Key Features
+## 📱 Follow Us
 
-### 360° Ball Detection
-Using 16 IR sensors placed evenly around the robot.
-
-### Orientation Stabilization
-Gyroscope-based correction system to prevent unwanted rotation.
-
-### Dynamic Motor Control
-Motor speed adapts based on load and match situation.
-
-### Modular PCB System
-Stacked upper & lower board for optimized space usage.
-
----
-
-## 📸 Robot Preview
-
-Add an image in an `images` folder and use:
-
-![Robot](images/robot.jpg)
-
----
-
-## 📱 Social Media
-
-Follow our development journey:
-
-- 📸 Instagram: https://instagram.com/yourusername  
-- ▶ YouTube: https://youtube.com/yourchannel  
-- 🎵 TikTok: https://tiktok.com/@yourusername  
-- 🌍 Website: https://yourwebsite.com  
+- Instagram: https://instagram.com/yourusername  
+- YouTube: https://youtube.com/yourchannel  
+- TikTok: https://tiktok.com/@yourusername  
 
 ---
 
 ## 🏆 Competition
 
-Developed for:
-
-**RoboCup Junior Soccer – 1v1 Category**
-
----
-
-## 📈 Future Improvements
-
-- Improved ball tracking algorithm  
-- Faster rotation stabilization  
-- Advanced match strategy AI  
-- PCB revision v2  
+RoboCup Junior Soccer  
+1v1 Lightweight Category  
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
-### ⭐ If you like this project, consider giving it a star!
+### Made by Team Alt+F4
