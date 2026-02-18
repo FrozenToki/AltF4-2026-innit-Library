@@ -56,3 +56,9 @@ void DrivingControl::addMotor(int index, Motor* motor) {
         frontRight = motor;
     }
 }
+
+void DrivingControl::turnOff() {
+	frontLeft->turnOff();
+	back->turnOff();
+	frontRight->turnOff();
+}

@@ -1,20 +1,36 @@
 #include "RotationControl.h"
 #include "app/Application.h"
 
-float RotationControl::getRotation(double s) {
-	float rotation = bno->rawData();
-	
-	s = this->normalizeAngle(s);
-	rotation = this->normalizeAngle(rotation);
 
-	input = rotation;
-	setpoint = s;
+float RotationControl::getRotation(double target) {
 
-	pid->Compute();
+    float current = bno->getContinuousAngle();
 
-	float outputValue = output / 255.0f;
-	return outputValue; 
+
+    float error = angleError(target, current);
+
+
+    float out = pd->update(error, current);
+
+
+    if (out > 255) out = 255;
+    if (out < -255) out = -255;
+
+
+    return out / 255.0f;
 }
+
+
+
+double RotationControl::angleError(double s, double i) {
+	double error = s - i;
+
+	if (error > 180)  error -= 360;
+	if (error < -180) error += 360;
+
+	return error;
+}
+
 
 RotationControl::RotationControl(Application *a) : app(a) {
 	pid = new PID(&input, &output, &setpoint, kP,kI, kD, DIRECT);
@@ -22,16 +38,9 @@ RotationControl::RotationControl(Application *a) : app(a) {
 	setpoint = 0;
 	pid->SetMode(AUTOMATIC);
 	pid->SetOutputLimits(-255, 255);
+	pid->SetSampleTime(10);
+	
+	pd = new PDController(kP, kD);
 }
 
 
-float RotationControl::normalizeAngle(float angle) {
-	while (angle < 0) angle += 360;
-	while (angle >= 360) angle -= 360;
-
-
-	if (angle > 180)
-		angle -= 360;
-
-	return angle;
-}

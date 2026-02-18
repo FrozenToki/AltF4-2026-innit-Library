@@ -2,7 +2,11 @@
 #include "app/Application.h"
 
 SensorManager::SensorManager(Application* a) : app(a) {
-	this->createBno055(192, "GyroSensor1");
+	this->createBno055(19, "GyroSensor1");
+	
+	this->createSr04(5,4,"distRight");
+	this->createSr04(29, 28, "distLeft");
+	this->createSr04(27, 26, "distBack");
 }
 
 
@@ -31,4 +35,15 @@ Bno055* SensorManager::getBno055ByName(String n) {
 	String sensorType;
 	sensorType = sensor->getType();
 	return static_cast<Bno055*>(sensor);
+}
+
+void SensorManager::createSr04(int trig, int echo, String n)	{
+	Sr04* sr04 = new Sr04(trig, echo, n);
+	app->getSensorList().addSensor(sr04);
+}
+
+Sr04 *SensorManager::getSr04ByName(String n)
+{
+	SensorBase* sensor = app->getSensorList().getSensorByName(n);
+	return static_cast<Sr04*>(sensor);
 }

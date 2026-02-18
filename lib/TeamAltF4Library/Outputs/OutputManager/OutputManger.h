@@ -3,7 +3,7 @@
 #include "Outputs/OutputBase/Led/Led.h"
 #include "Outputs/OutputBase/Motor/Motor.h"
 #include "Outputs/OutputList/OutputList.h"
-
+#include "Outputs/OutputBase/Ssd1306/Ssd1306.h"
 
 
 // forward declaration
@@ -24,4 +24,7 @@ public:
 
 	void createMotor(int pInA, int pInB, int pPwm, String n); 
 	Motor* getMotorByName(String n);
+
+	void createSsd1306(String n);
+	Ssd1306* getSsd1306ByName(String n);
 };

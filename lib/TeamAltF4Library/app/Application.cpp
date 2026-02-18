@@ -2,7 +2,7 @@
 
 Application::Application() : sensorManager(this), sensorList(this), 
 	outputManager(this), outputList(this), errorMessages(this), drivingControl(this),
-	serialComm(this), rotationControl(this) {} 
+	rotationControl(this), serialComm(this), geometrie(this), loops(this), modi(this), irSensorReader(this) {} 
 
 SensorList& Application::getSensorList() {
 	return sensorList;
@@ -32,10 +32,27 @@ DrivingControl& Application::getDrivingControl() {
 	return drivingControl;
 }
 
+RotationControl& Application::getRotationControl() {
+	return rotationControl;
+}
+
 SerialComm& Application::getSerialComm() {
 	return serialComm;
 }
 
-RotationControl& Application::getRotationControl() {
-	return rotationControl;
+Geometrie& Application::getGeometrie() {
+	return geometrie;
+	
+}
+
+Loops& Application::getLoops() {
+	return loops;
+}
+
+Modi& Application::getModi() {
+	return modi;
+}
+
+IrSensorReader& Application::getIrSensorReader() {
+	return irSensorReader;
 }

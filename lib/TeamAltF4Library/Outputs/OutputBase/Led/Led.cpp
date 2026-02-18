@@ -1,6 +1,6 @@
 #include "Led.h"
 
-Led::Led(int p, String n) : OutputBase(n), brightness(255), pin(p) {
+Led::Led(int p, String n) : OutputBase(n), pin(p), brightness(255) {
 	type = LED;
 	pinMode(pin, OUTPUT);
 }

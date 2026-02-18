@@ -3,7 +3,8 @@
 #include "Sensorik/SensorBase/Button/Button.h"
 #include "Sensorik/SensorList/SensorList.h"
 #include "Sensorik/SensorBase/Bno055/Bno055.h"
-
+#include "Sensorik/SensorBase/SR04/Sr04.h"
+#include "Sensorik/SensorBase/IrSensors/IrSensors.h"
 
 // forward declaration
 class Application; 
@@ -24,5 +25,11 @@ public:
 
 	void createBno055(int p, String n);
 	Bno055* getBno055ByName(String n);
+
+	void createSr04(int trig, int echo, String n);
+	Sr04* getSr04ByName(String n);
+
+	void createIrSensor(int p, String n, float a);
+	IrSensor* getIrSensorByName(String n);
 };
 

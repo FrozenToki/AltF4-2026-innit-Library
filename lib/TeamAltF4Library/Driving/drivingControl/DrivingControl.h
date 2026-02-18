@@ -16,7 +16,7 @@ public:
     DrivingControl(Application* a);   
     void drive(float angle, float motorSpeed, float rotation);
     void addMotor(int index, Motor* motor);
-    
+    void turnOff();
 
 
 };

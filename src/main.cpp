@@ -3,11 +3,16 @@
 #include "Sensorik/SensorBase/SensorBase.h"
 #include "Config/Config.h"
 #include "Outputs/OutputBase/Motor/Motor.h"
-#include "Sensorik/SensorBase/Bno055/Bno055.h"
+//#include "Sensorik/SensorBase/Bno055/Bno055.h"
 
 Application app;
 
 Bno055* bno;
+
+Button* greenBtn;
+
+
+//Ssd1306* display;
 float hellig;
 String Nachricht = "";
 
@@ -63,32 +68,73 @@ void setup() {
 
 	pinMode(9, INPUT_PULLDOWN);
 	bno = app.getSensorManager().getBno055ByName("GyroSensor1"); 
+
+	app.getSensorManager().createButton(6, "GreenButton");
+	greenBtn = app.getSensorManager().getButtonByName("GreenButton");
+
+	//display = app.getOutputManager().getSsd1306ByName("Display");
+
+
+
+	pinMode(18, INPUT);
+	
+	
+	while(!greenBtn->isPressed()) {
+		bno->getCalibrationStatus();
+		//display->print(bno->getSystem(), bno->getGyro(), bno->getAccel());
+		delay(100);
+		greenBtn->update();
+	}
+	//display->clear();
+
 }
 
 float degree = 0;
+float strength = 0;
 
 float i = 0;
 void loop() {	
+	digitalWrite(LED_BUILTIN, LOW);
 	if (Serial3.available())  {
 		//Serial.println(Serial3.readStringUntil('\n'));
 		String input = Serial3.readStringUntil('\n');
-		degree = input.toFloat();
+		sscanf(input.c_str(), "%f;%f", &degree, &strength);
+
+
 		while (degree > 180) degree -= 360;
 		while (degree < -180) degree += 360;	
 	}
+	
+	app.getIrSensorReader().readAll(30000, false, 0);
+	app.getIrSensorReader().setAll();
+
+	IrSensor* ir1 = app.getSensorManager().getIrSensorByName("ir1");
+	IrSensor* ir2 = app.getSensorManager().getIrSensorByName("ir2");
+	
+	float v1 = ir1->getCalculatedValue();
+	float v2 = ir2->getCalculatedValue();
+
+	float ir = (v1 + v2) / 2;
 	if(digitalRead(9)== HIGH) {
 		bno->update();
-		app.getDrivingControl().drive(0, 0 , app.getRotationControl().getRotation(0));
-		//Serial.println(bno->rawData());
-		//Serial.println(app.getRotationControl().getRotation());
+		
+		app.getModi().mode(degree, strength, ir);
+		
 	} 
 	else {
-		motor1->turnOff();
-		motor2->turnOff();
-		motor3->turnOff();
-	}
+		greenBtn->update();
+		if(greenBtn->isPressed()) {
+			app.getModi().setKickOffMode();
+			bno->calibrate();
+		}
+		
+		app.getDrivingControl().turnOff();
+		//display->print(distLeft->rawData(),distBack->rawData(),distRight->rawData());
 
-	//delay(100);
+	}
+	app.getLoops().readDistance();
+	
+
 
 }
 

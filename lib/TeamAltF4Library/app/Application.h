@@ -10,6 +10,10 @@
 #include "Driving/drivingControl/DrivingControl.h"
 #include "Serial/SerialComm.h"
 #include "Driving/rotationControl/RotationControl.h"
+#include "Geometrie/Geometrie.h"
+#include "loops/loops.h"
+#include "Modi/Modi.h"
+#include "Sensorik/IrSensorReader/IrSensorReader.h"
 
 // Used to get acces to all the parts of the library from anywhere in the programm.
 // It has instances of all the different main parts of the library.
@@ -26,10 +30,17 @@ private:
 	ErrorMessages errorMessages;
 
 	DrivingControl drivingControl;
+	RotationControl rotationControl;
 
 	SerialComm serialComm;
 
-	RotationControl rotationControl;
+	Geometrie geometrie;
+
+	Loops loops;
+
+	Modi modi;
+
+	IrSensorReader irSensorReader;
 public:
 	SensorList& getSensorList();
 	SensorManager& getSensorManager();
@@ -42,11 +53,19 @@ public:
 	ErrorMessages& getErrorMessage();
 
 	DrivingControl& getDrivingControl();
+	RotationControl& getRotationControl();
 
 	SerialComm& getSerialComm();
 
-	RotationControl& getRotationControl();
+	Geometrie& getGeometrie();
+
+	Loops& getLoops();
+
+  Modi& getModi();
+
+	IrSensorReader& getIrSensorReader();
 
 	Application();
+
 };
 	
