@@ -3,9 +3,9 @@
 
 
 Loops::Loops (Application* a) : app(a) {
-	distRight = app->getSensorManager().getSr04ByName("distRight");
-	distBack = app->getSensorManager().getSr04ByName("distBack");
-	distLeft = app->getSensorManager().getSr04ByName("distLeft");
+	distRight = app->getSensorManager().getSr04ByName(Config::RIGHT_DIST_NAME);
+	distBack = app->getSensorManager().getSr04ByName(Config::BACK_DIST_NAME);
+	distLeft = app->getSensorManager().getSr04ByName(Config::LEFT_DIST_NAME);
 	
 }
 

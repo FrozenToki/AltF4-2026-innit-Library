@@ -18,4 +18,14 @@ public:
 	static constexpr float HIGH_SPEED = 0.9;
 
 	static constexpr int COUNT_IR_SENSOR = 2;
+
+
+	static constexpr const char* RIGHT_DIST_NAME = "distRight";
+	static constexpr const char* LEFT_DIST_NAME = "distLeft";
+	static constexpr const char* BACK_DIST_NAME = "distBack";
+
+	static constexpr const char* GYRO_NAME = "GyroSens";
+
+	static constexpr const char* IR_SENS_LEFT_NAME = "irL";
+	static constexpr const char* IR_SENS_RIGHT_NAME = "irR";
 };

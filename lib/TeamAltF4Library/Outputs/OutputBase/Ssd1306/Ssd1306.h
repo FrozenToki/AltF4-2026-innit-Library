@@ -14,6 +14,9 @@ private:
 	Adafruit_SSD1306* display;
 public:
 	Ssd1306(String n);
+
 	void print(float v1, float v2, float v3);
+	void print(String v1, String v2, String v3);
+
 	void clear();
 };

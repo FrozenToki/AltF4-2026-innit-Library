@@ -25,6 +25,6 @@ class RotationControl {
 
 		double kP = 1.5;
 		double kI = 0.0;
-		double kD = 5.0;
+		double kD = 2.0;
 	};
 

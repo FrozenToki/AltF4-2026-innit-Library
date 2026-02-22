@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include "Sensorik/SensorBase/SR04/Sr04.h"
+#include "Config/Config.h"
 
 class Application;
 

@@ -2,7 +2,7 @@
 #include "app/Application.h"
 
 OutputManager::OutputManager(Application* a) : app(a) {
-	//this->createSsd1306("Display");
+	this->createSsd1306("Display");
 }
 
 void OutputManager::createLed(int p, String n) {

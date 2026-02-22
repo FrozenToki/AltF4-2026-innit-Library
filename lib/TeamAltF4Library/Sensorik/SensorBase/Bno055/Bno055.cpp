@@ -2,8 +2,8 @@
 
 Bno055::Bno055(int p, String n) : SensorBase(p, n) {
 	type = BNO055;
-	bno = Adafruit_BNO055(55, 0x28, &Wire1);
-	Wire1.begin();
+	bno = Adafruit_BNO055(55, 0x28, &Wire2);
+	Wire2.begin() ;
 if (!bno.begin()) {
 	while (true) {
 		digitalWrite(LED_BUILTIN, HIGH);
@@ -16,27 +16,23 @@ if (!bno.begin()) {
 	bno.setExtCrystalUse(true);
 	delay(100);
 	bno.setMode(OPERATION_MODE_IMUPLUS);
-	values.resize(5);
-	for (size_t i = 0; i < 5; i++) {
-		values[i] = 0.0f;
-	}
+
 	
 }
 
 
 void Bno055::update() {
+
     imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
 
     float raw = euler.x();  
 
-
-		raw -= calibratedValue;
-		if (raw < 0) raw += 360;
-		if (raw >= 360) raw -= 360;
     
-    value = raw;
+    raw -= calibratedValue;
+    if (raw < 0) raw += 360;
+    if (raw >= 360) raw -= 360;
 
-
+    
     float diff = raw - lastAngle;
 
     if (diff > 180)  diff -= 360;
@@ -45,23 +41,28 @@ void Bno055::update() {
     continuousAngle += diff;
     lastAngle = raw;
 
-
-    values.erase(values.begin());
-    values.push_back(raw);
+    value = raw;
 }
+
 
 
 
 
 float Bno055::rawData() {
-    float sum = 0;
-    for (float v : values) sum += v;
-    return sum / values.size();
-}
+    //float sum = 0;
+    //for (float v : values) sum += v;
+    //return sum / values.size();	
+		return value;	
+	}
 
 void Bno055::calibrate() {
-	imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
-  calibratedValue = euler.x();
+    imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+    calibratedValue = euler.x();
+
+    lastAngle = 0.0f;
+    continuousAngle = 0.0f;
+
+
 }
 
 void Bno055::getCalibrationStatus() {

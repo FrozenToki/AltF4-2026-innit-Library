@@ -2,11 +2,14 @@
 #include "app/Application.h"
 
 SensorManager::SensorManager(Application* a) : app(a) {
-	this->createBno055(19, "GyroSensor1");
+	this->createBno055(19, Config::GYRO_NAME);
 	
-	this->createSr04(5,4,"distRight");
-	this->createSr04(29, 28, "distLeft");
-	this->createSr04(27, 26, "distBack");
+	this->createSr04(5,4,Config::RIGHT_DIST_NAME);
+	this->createSr04(29, 28, Config::LEFT_DIST_NAME);
+	this->createSr04(27, 26, Config::BACK_DIST_NAME);
+
+	this->createIrSensor(2, Config::IR_SENS_LEFT_NAME, 0.0f);
+	this->createIrSensor(3, Config::IR_SENS_RIGHT_NAME, 0.0f);
 }
 
 

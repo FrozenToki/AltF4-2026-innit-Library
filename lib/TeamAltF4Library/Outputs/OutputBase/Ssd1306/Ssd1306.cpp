@@ -30,6 +30,21 @@ void Ssd1306::print(float v1, float v2, float v3) {
 	display->display();
 }
 
+void Ssd1306::print(String v1, String v2, String v3) {
+	display->clearDisplay();
+	
+	display->setCursor(0, 0);
+	display->println(v1);
+	
+	display->setCursor(0, 20);
+	display->println(v2);
+	
+	display->setCursor(0, 40);
+	display->println(v3);
+	
+	display->display();
+}
+
 void Ssd1306::clear() {
 	display->clearDisplay();
 	display->display();

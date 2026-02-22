@@ -2,10 +2,8 @@
 #include "app/Application.h"
 
 IrSensorReader::IrSensorReader(Application* a) : app(a) {
-	app->getSensorManager().createIrSensor(2, "ir1", 0.0f);
-	app->getSensorManager().createIrSensor(3, "ir2", 0.0f);
-	irSensList[0] = app->getSensorManager().getIrSensorByName("ir1");
-	irSensList[1] = app->getSensorManager().getIrSensorByName("ir2");
+	irSensList[0] = app->getSensorManager().getIrSensorByName(Config::IR_SENS_LEFT_NAME);
+	irSensList[1] = app->getSensorManager().getIrSensorByName(Config::IR_SENS_RIGHT_NAME);
 }
 /*
 * Kommentar

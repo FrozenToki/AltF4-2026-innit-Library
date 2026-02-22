@@ -4,9 +4,12 @@
 
 
 Modi::Modi(Application* a) : app(a) {
-  distRight = app->getSensorManager().getSr04ByName("distRight");
-	distLeft = app->getSensorManager().getSr04ByName("distLeft");
-	distBack = app->getSensorManager().getSr04ByName("distBack");
+  distRight = app->getSensorManager().getSr04ByName(Config::RIGHT_DIST_NAME);
+	distLeft = app->getSensorManager().getSr04ByName(Config::LEFT_DIST_NAME);
+	distBack = app->getSensorManager().getSr04ByName(Config::BACK_DIST_NAME);
+
+	bno = app->getSensorManager().getBno055ByName(Config::GYRO_NAME); 
+
 	lastModi = "kO";
 }
 
@@ -65,7 +68,7 @@ void Modi::setKickOffMode() {
 
 void Modi::ballHolder() {
 	lastModi = "bH";
-	speed = Config::MIDDLE_SPEED;
+	speed = Config::HIGH_SPEED;
 	if (distRight->rawData() > distLeft->rawData()) {
 		if (distRight->rawData() <= 40) {
 			angle = degree - 30;
@@ -95,20 +98,42 @@ void Modi::ballHolder() {
 
 }
 
+void Modi::offWall() {
+	lastModi = "oW";
+	speed = Config::MIDDLE_SPEED;
+	direction = degree + bno->rawData();
+	angle = 0;
+}
+
+String Modi::getLastMode() {
+	return lastModi;
+}
+
 void Modi::mode(float d, float s, float ir) {
 	degree = d;
-	direction = 359;
+	direction = 0;
 	if (ir >= 18000) {
 		ballHolder();
 	}
-  if (degree >= -180 && degree <= -70) {
+	//else if (degree <= 90 && degree >= 10 && distRight->rawData() <= 20.0f) {
+	//	offWall();
+	//}
+	//else if (degree >= -90 && degree <= -10 && distLeft->rawData() <= 20.0f) {
+	//	offWall();
+	//}
+  else if (degree >= -180 && degree <= -70) {
 		lagOfProgressLeft();
 	}
 	else if (degree <= 180 && degree >= 70) {
 		lagOfProgressRight();
 	}
+	else if (lastModi == "oW") {
+		digitalWrite(LED_BUILTIN, HIGH);
+		offWall();
+	}
 	else if (lastModi == "bH") {
 		ballHolder();
+		
 	}
 	else if (lastModi == "kO") {
 		kickOff();
@@ -119,58 +144,64 @@ void Modi::mode(float d, float s, float ir) {
 	else if (lastModi == "lOPL") {
     lagOfProgressLeft();
 	}
-  
-  if (angle <= 180 && angle >= 0)
-		{
-			if (distRight->rawData() <= 14)
-			{
-				speed = 0.4;
-				if (angle <= 90)
-				{
-					angle = 0;
-				}
-				else {
-					
-					angle = -90;
-				}
-			}
-		}
-		else if (angle <= 0 && angle >= -180)
-		{
-			if (distLeft->rawData() <= 14)
-			{
-				speed = 0.4;
-				if (angle >= -90)
-				{
-					angle = 0;
-				}
-				else {
-					angle = 90;
-				}
-			}
-		}
-		else if (angle <= -90 || angle >= 90)
-		{
-			
-			if (distBack->rawData() <= 35)
-			{
-				speed = 0.4;
-				if (angle <= -90)
-				{
-					angle = -90;
-				}
-				else {
-					angle = 90;
-				}
-			}
-			else if(distBack->rawData() <= 55 || distBack->rawData() == 1000) {
-				speed = 0.6;
-			}
-		}
 
-		if (s == 0 ) {
-			speed = 0;
+	digitalWrite(LED_BUILTIN, LOW);
+	if (angle <= 180 && angle >= 0)
+	{
+		if (distRight->rawData() <= 14)
+		{
+			speed = 0.4;
+			if (angle <= 90)
+			{
+				angle = 0;
+			}
+			else {
+				
+				angle = -90;
+			}
+			angle += direction;
 		}
+	}
+	else if (angle <= 0 && angle >= -180)
+	{
+		if (distLeft->rawData() <= 14)
+		{
+			speed = 0.4;
+			if (angle >= -90)
+			{
+				angle = 0;
+			}
+			else {
+				angle = 90;
+			}
+			angle += direction;
+		}
+	}
+	else if (angle <= -90 || angle >= 90)
+	{
+		
+		if (distBack->rawData() <= 35)
+		{
+			speed = 0.4;
+			if (angle <= -90)
+			{
+				angle = -90;
+			}
+			else {
+				angle = 90;
+			}
+			angle += direction;
+		}
+		else if(distBack->rawData() <= 55 || distBack->rawData() == 1000) {
+			speed = 0.6;
+		}
+	}
+
+
+  
+	if (s == 0 ) {
+		speed = 0;
+	}
 
 	app->getDrivingControl().drive(angle, speed, app->getRotationControl().getRotation(direction));
 }

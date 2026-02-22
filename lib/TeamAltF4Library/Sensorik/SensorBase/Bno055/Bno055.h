@@ -9,7 +9,6 @@
 
 class Bno055 : public SensorBase {
 	private:
-		std::vector<float> values; 
 
 		float lastAngle = 0;
 		float continuousAngle = 0;
