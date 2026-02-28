@@ -1,8 +1,13 @@
 #include "OutputManger.h"
 #include "app/Application.h"
 
+
 OutputManager::OutputManager(Application* a) : app(a) {
-	this->createSsd1306("Display");
+	this->createSsd1306(Config::DISPLAY_NAME);
+
+	this->createMotor(21, 20, 10, Config::MOTOR_VL_NAME);
+	this->createMotor(32, 33, 11, Config::MOTOR_BA_NAME);
+	this->createMotor(36, 38, 12, Config::MOTOR_VR_NAME);
 }
 
 void OutputManager::createLed(int p, String n) {

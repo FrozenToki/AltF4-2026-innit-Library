@@ -3,10 +3,10 @@
 
 class Application; 
 
-class Geometrie {
+class Geometry {
 private:
 	Application* app;
 public: 
-	Geometrie(Application* a);
+	Geometry(Application* a);
 	float normalizeAngle(float angle);
 };

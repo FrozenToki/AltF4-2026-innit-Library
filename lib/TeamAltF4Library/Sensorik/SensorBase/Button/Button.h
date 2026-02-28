@@ -1,3 +1,4 @@
+#pragma once
 #include "Sensorik/SensorBase/SensorBase.h"
 
 // Used to read if a button is pressed or not. 

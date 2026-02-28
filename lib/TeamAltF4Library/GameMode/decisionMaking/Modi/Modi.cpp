@@ -66,16 +66,24 @@ void Modi::setKickOffMode() {
 	lastModi = "kO";
 }
 
+unsigned long lastTime = 0;
+
 void Modi::ballHolder() {
 	lastModi = "bH";
-	speed = Config::HIGH_SPEED;
+	if (millis() - lastTime > 200){
+		speed = Config::HIGH_SPEED;
+	}
+	else {
+		speed = Config::MIDDLE_SPEED;
+	}
+	
 	if (distRight->rawData() > distLeft->rawData()) {
 		if (distRight->rawData() <= 40) {
-			angle = degree - 30;
+			angle =  30;
 
 		}
 		else if (distLeft->rawData() <= 40) {
-		angle = degree + 30;
+		angle =  30;
 
 		}
 		else {
@@ -85,10 +93,10 @@ void Modi::ballHolder() {
 	}
 	else {
 		if (distRight->rawData() <= 40) {
-			angle = degree - 30;
+			angle =  30;
 		}
 		else if (distLeft->rawData() <= 40) {
-		angle = degree + 30;
+		angle =  30;
 		}
 		else {
 			angle = degree;
@@ -102,7 +110,16 @@ void Modi::offWall() {
 	lastModi = "oW";
 	speed = Config::MIDDLE_SPEED;
 	direction = degree + bno->rawData();
-	angle = 0;
+
+	if (direction >= 0) {
+		direction -=10;
+	}
+	else {
+		direction +=10;
+	}
+	float robotAngle = app->getGeometry().normalizeAngle(bno->rawData());
+	angle = -robotAngle;
+	test = false;
 }
 
 String Modi::getLastMode() {
@@ -111,20 +128,21 @@ String Modi::getLastMode() {
 
 void Modi::mode(float d, float s, float ir) {
 	degree = d;
+	test = true;
 	direction = 0;
-	if (ir >= 18000) {
+	if (app->getStates().ballState() == Config::BALL_HELD) {
 		ballHolder();
 	}
-	//else if (degree <= 90 && degree >= 10 && distRight->rawData() <= 20.0f) {
-	//	offWall();
-	//}
-	//else if (degree >= -90 && degree <= -10 && distLeft->rawData() <= 20.0f) {
-	//	offWall();
-	//}
-  else if (degree >= -180 && degree <= -70) {
+	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT && distRight->rawData() <= 15.0f) {
+		offWall();
+	}
+	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT && distLeft->rawData() <= 15.0f) {
+		offWall();
+	}
+  else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
 		lagOfProgressLeft();
 	}
-	else if (degree <= 180 && degree >= 70) {
+	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
 		lagOfProgressRight();
 	}
 	else if (lastModi == "oW") {
@@ -144,64 +162,73 @@ void Modi::mode(float d, float s, float ir) {
 	else if (lastModi == "lOPL") {
     lagOfProgressLeft();
 	}
-
-	digitalWrite(LED_BUILTIN, LOW);
-	if (angle <= 180 && angle >= 0)
-	{
-		if (distRight->rawData() <= 14)
+	if (test == true) {
+		digitalWrite(LED_BUILTIN, LOW);
+		if (angle <= 180 && angle >= 0)
 		{
-			speed = 0.4;
-			if (angle <= 90)
+			if (distRight->rawData() <= 14)
 			{
-				angle = 0;
+				speed = 0.4;
+				if (angle <= 90)
+				{
+					angle = 0;
+				}
+				else {
+					
+					angle = -90;
+				}
+				angle += direction;
 			}
-			else {
-				
-				angle = -90;
+		}
+		else if (angle <= 0 && angle >= -180)
+		{
+			if (distLeft->rawData() <= 14)
+			{
+				speed = 0.4;
+				if (angle >= -90)
+				{
+					angle = 0;
+				}
+				else {
+					angle = 90;
+				}
+				angle += direction;
 			}
-			angle += direction;
+		}
+		else if (angle <= -90 || angle >= 90)
+		{
+			
+			if (distBack->rawData() <= 35)
+			{
+				speed = 0.4;
+				if (angle <= -90)
+				{
+					angle = -90;
+				}
+				else {
+					angle = 90;
+				}
+				angle += direction;
+			}
+			else if(distBack->rawData() <= 55 || distBack->rawData() == 1000) {
+				speed = 0.6;
+			}
 		}
 	}
-	else if (angle <= 0 && angle >= -180)
-	{
-		if (distLeft->rawData() <= 14)
-		{
-			speed = 0.4;
-			if (angle >= -90)
-			{
-				angle = 0;
-			}
-			else {
-				angle = 90;
-			}
-			angle += direction;
-		}
-	}
-	else if (angle <= -90 || angle >= 90)
-	{
-		
-		if (distBack->rawData() <= 35)
-		{
-			speed = 0.4;
-			if (angle <= -90)
-			{
-				angle = -90;
-			}
-			else {
-				angle = 90;
-			}
-			angle += direction;
-		}
-		else if(distBack->rawData() <= 55 || distBack->rawData() == 1000) {
-			speed = 0.6;
-		}
-	}
+	
 
 
   
 	if (s == 0 ) {
 		speed = 0;
 	}
+
+	if (!(lastModi == "bH")) {
+		lastTime = millis();
+	}
+
+	//angle = angle - bno->rawData();
+	//angle = app->getGeometry().normalizeAngle(angle);
 
 	app->getDrivingControl().drive(angle, speed, app->getRotationControl().getRotation(direction));
 }

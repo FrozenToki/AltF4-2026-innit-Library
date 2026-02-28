@@ -10,10 +10,13 @@
 #include "Driving/drivingControl/DrivingControl.h"
 #include "Serial/SerialComm.h"
 #include "Driving/rotationControl/RotationControl.h"
-#include "Geometrie/Geometrie.h"
+#include "Geometry/Geometry.h"
 #include "loops/loops.h"
-#include "Modi/Modi.h"
+#include "GameMode/decisionMaking/Modi/Modi.h"
 #include "Sensorik/IrSensorReader/IrSensorReader.h"
+#include "States/States.h"
+#include "MenuManager/MenuManager.h"
+#include "GameMode/GameMode.h"
 
 // Used to get acces to all the parts of the library from anywhere in the programm.
 // It has instances of all the different main parts of the library.
@@ -34,13 +37,19 @@ private:
 
 	SerialComm serialComm;
 
-	Geometrie geometrie;
+	Geometry geometry;
 
 	Loops loops;
 
 	Modi modi;
 
 	IrSensorReader irSensorReader;
+
+	States states;
+
+	MenuManager menuManager;
+
+	GameMode gameMode;
 public:
 	SensorList& getSensorList();
 	SensorManager& getSensorManager();
@@ -57,13 +66,21 @@ public:
 
 	SerialComm& getSerialComm();
 
-	Geometrie& getGeometrie();
+	Geometry& getGeometry();
 
 	Loops& getLoops();
 
   Modi& getModi();
 
 	IrSensorReader& getIrSensorReader();
+
+	States& getStates();
+
+	MenuManager& getMenuManager();
+
+	GameMode& getGameMode();
+
+	void softwareReset();
 
 	Application();
 

@@ -23,7 +23,7 @@ void Sr04::update()	{
 	
 	if (value >= 1000)
 	{
-		value = -1;
+		value = 1000;
 	}
 	
 }

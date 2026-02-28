@@ -5,6 +5,8 @@
 #include "Sensorik/SensorBase/Bno055/Bno055.h"
 #include "Sensorik/SensorBase/SR04/Sr04.h"
 #include "Sensorik/SensorBase/IrSensors/IrSensors.h"
+#include "Sensorik/SensorBase/IrRing/IrRing.h"
+#include "Sensorik/SensorBase/ButtonCross/ButtonCross.h"
 
 // forward declaration
 class Application; 
@@ -31,5 +33,11 @@ public:
 
 	void createIrSensor(int p, String n, float a);
 	IrSensor* getIrSensorByName(String n);
+
+	void createIrRing(String n);
+	IrRing* getIrRingByName(String n);
+
+	void createButtonCross(String n, int pin, float v1, float v2, float v3, float v4, float v5);
+	ButtonCross* getButtonCrossByName(String n);
 };
 

@@ -2,7 +2,8 @@
 
 Application::Application() : sensorManager(this), sensorList(this), 
 	outputManager(this), outputList(this), errorMessages(this), drivingControl(this),
-	rotationControl(this), serialComm(this), geometrie(this), loops(this), modi(this), irSensorReader(this) {} 
+	rotationControl(this), serialComm(this), geometry(this), loops(this), modi(this), 
+	irSensorReader(this), states(this), menuManager(this), gameMode(this) {} 
 
 SensorList& Application::getSensorList() {
 	return sensorList;
@@ -40,8 +41,8 @@ SerialComm& Application::getSerialComm() {
 	return serialComm;
 }
 
-Geometrie& Application::getGeometrie() {
-	return geometrie;
+Geometry& Application::getGeometry() {
+	return geometry;
 	
 }
 
@@ -55,4 +56,22 @@ Modi& Application::getModi() {
 
 IrSensorReader& Application::getIrSensorReader() {
 	return irSensorReader;
+}
+
+States& Application::getStates() {
+	return states;
+}
+
+MenuManager& Application::getMenuManager() {
+	return menuManager;
+}
+
+GameMode& Application::getGameMode() {
+	return gameMode;
+}
+
+void Application::softwareReset() {
+  SRC_GPR5 = 0x0BAD00F1;
+	SCB_AIRCR = 0x05FA0004;
+	while (1);
 }
