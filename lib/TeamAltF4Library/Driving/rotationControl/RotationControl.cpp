@@ -2,22 +2,25 @@
 #include "app/Application.h"
 
 
-float RotationControl::getRotation(double target) {
+float RotationControl::
+getRotation(double target) {
 
-    float cont = bno->getContinuousAngle();          
+	float cont = bno->getContinuousAngle();          
 
-		int periodes = cont / 360.0f;
+	while (target < 0)   target += 360;
+  while (target >= 360) target -= 360;
 
-		target = target + (360.0f * periodes);
+	double targetAdjusted = target + floor(cont / 360.0) * 360.0;
 
-    float error = angleError(target, cont);
 
-    float out = pd->update(error, cont);             
+	float error = angleError(targetAdjusted, cont);
 
-    if (out > 255) out = 255;
-    if (out < -255) out = -255;
+	float out = pd->update(error, cont);             
 
-    return out / 255.0f;
+	if (out > 255) out = 255;
+	if (out < -255) out = -255;
+
+	return out / 255.0f;
 
 
 }

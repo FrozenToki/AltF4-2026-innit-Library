@@ -13,9 +13,13 @@ SensorManager::SensorManager(Application* a) : app(a) {
 
 	this->createIrRing(Config::IR_RING_NAME);
 
-	this->createButtonCross(Config::BUTTON_CROSS_NAME, 18, 924, 508, 834, 317, 6898);
+	this->createButtonCross(Config::BUTTON_CROSS_NAME, 18, 924, 508, 834, 317, 691);
 
 	this->createButton(6, Config::GREEN_BUTTON_NAME);
+
+	this->createEZ(39,Config::EZ_VL_NAME);
+	this->createEZ(40,Config::EZ_V_NAME);
+	this->createEZ(41,Config::EZ_VR_NAME);
 }
 
 // === BUTTON ===
@@ -59,6 +63,18 @@ Sr04 *SensorManager::getSr04ByName(String n)
 	return static_cast<Sr04*>(sensor);
 }
 
+// === IR_SENSOR ===
+
+void SensorManager::createIrSensor(int p, String n, float a) {
+	IrSensor* i = new IrSensor(p, n, a);
+	app->getSensorList().addSensor(i);
+}
+
+IrSensor* SensorManager::getIrSensorByName(String n) {
+	SensorBase* sensor = app->getSensorList().getSensorByName(n);
+  	return static_cast<IrSensor*>(sensor);
+}
+
 // === IR_RING ===
 
 void SensorManager::createIrRing(String n) {
@@ -72,6 +88,8 @@ IrRing* SensorManager::getIrRingByName(String n) {
 
 }
 
+// === BUTTON_CROSS ===
+
 void SensorManager::createButtonCross(String n, int pin, float v1, float v2, float v3, float v4, float v5) {
 	ButtonCross* buttonCross = new ButtonCross(n, pin, v1, v2, v3, v4, v5);
 	app->getSensorList().addSensor(buttonCross);
@@ -80,4 +98,16 @@ void SensorManager::createButtonCross(String n, int pin, float v1, float v2, flo
 ButtonCross *SensorManager::getButtonCrossByName(String n) {
 	SensorBase* sensor = app->getSensorList().getSensorByName(n);
 	return static_cast<ButtonCross*>(sensor);
+}
+
+// === EZ ===
+
+void SensorManager::createEZ(int p, String n) {
+	EZ* ez = new EZ(p, n);
+	app->getSensorList().addSensor(ez);
+}
+
+EZ *SensorManager::getEZByName(String n) {
+	SensorBase* sensor = app->getSensorList().getSensorByName(n);
+	return static_cast<EZ*>(sensor);
 }

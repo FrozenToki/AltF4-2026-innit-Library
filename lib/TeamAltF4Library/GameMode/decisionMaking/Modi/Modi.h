@@ -9,8 +9,10 @@ class Application;
 class Modi {
 public:
 	Modi(Application* a);
-  void lagOfProgressLeft();
-	void mode(float d, float s, float ir);
+
+	void mode(float d, float s);
+
+	void lagOfProgressLeft();
 	void lagOfProgressRight();
  
 	void kickOff();
@@ -18,15 +20,27 @@ public:
 	void setKickOffMode();
 
 	void ballHolder();
+	void ballHolderFrontLeft();
+	void ballHolderFrontRight();
+	void ballHolderFront();
 
 	void offWall();
 
+	void turnToBall();
+	
+	void toBallLeft();
+
 	String getLastMode();
+
+	void fixDrivingAngle();
+
 private:
   Application* app;
 	float angle = 0;
 	float speed = 0;
 	float degree = 0;
+
+	int lastRobotState = 0;
 
 	bool test = true;
   
@@ -39,4 +53,6 @@ private:
 	Bno055* bno;
 
 	String lastModi = "";
+
+	float robotAngle = 0;
 };

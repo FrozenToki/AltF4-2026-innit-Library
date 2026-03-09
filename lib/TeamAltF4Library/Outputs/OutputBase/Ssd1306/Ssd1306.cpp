@@ -45,6 +45,17 @@ void Ssd1306::print(String v1, String v2, String v3) {
 	display->display();
 }
 
+void Ssd1306::resetConnection() {
+	if (!display->begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS)) while(1);
+
+	display->clearDisplay();
+	display->setTextColor(SSD1306_WHITE);
+	display->setTextSize(2);
+	display->setCursor(0,0);
+	display->println("TeamAlt+F4");
+	display->display();
+}
+
 void Ssd1306::clear() {
 	display->clearDisplay();
 	display->display();

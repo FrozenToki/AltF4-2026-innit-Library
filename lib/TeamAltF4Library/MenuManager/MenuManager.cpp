@@ -23,8 +23,6 @@ void MenuManager::loop() {
 		greenButton->update();
 		if (greenButton->isPressed()) {
 			
-			greenButton->update();
-			
 			app->getDrivingControl().turnOff();
 			inMode = false;
 		} else {
@@ -34,7 +32,13 @@ void MenuManager::loop() {
 		
 	} else {
 		buttonCross->update();
-		if (buttonCross->pressed(1)) {
+		if  (buttonCross->pressed(4)) {
+			while (buttonCross->pressed(4)){
+				buttonCross->update();
+			}
+			display->resetConnection();
+		}
+		else if (buttonCross->pressed(1)) {
 			while (buttonCross->pressed(1)){
 				buttonCross->update();
 			}
@@ -55,14 +59,11 @@ void MenuManager::loop() {
 		}
 
 		display->print("_______", modeNames[mode], "_______");
-		if (buttonCross->pressed(0)) {
-			while (buttonCross->pressed(0)){
+		if (buttonCross->pressed(2)) {
+			while (buttonCross->pressed(2)){
 				buttonCross->update();
 			}
 			inMode = true;
 		}
 	}
-	
-	
-	
 }

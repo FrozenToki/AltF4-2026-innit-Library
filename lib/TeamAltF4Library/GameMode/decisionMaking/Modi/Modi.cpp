@@ -14,11 +14,11 @@ Modi::Modi(Application* a) : app(a) {
 }
 
 void Modi::lagOfProgressLeft() {
-	lastModi = "lOPL";
-  angle = degree - 35;
-	
-	speed = Config::HIGH_SPEED;
 
+	lastModi = "lOPL";
+
+	angle = degree - 35;
+	speed = Config::HIGH_SPEED;
 
   if (degree >= -25)
 	{
@@ -32,14 +32,13 @@ void Modi::lagOfProgressLeft() {
 		speed = Config::MIDDLE_SPEED;
 		angle = degree - 10;
 	}
-	
+	fixDrivingAngle();
 }
 void Modi::lagOfProgressRight() {
 	lastModi = "lOPR";
-  angle = degree + 35;
-	
-	speed = Config::HIGH_SPEED;
 
+	angle = degree + 35;
+	speed = Config::HIGH_SPEED;
 
   if (degree <= 25) {
 		speed = Config::MIDDLE_SPEED;
@@ -52,7 +51,8 @@ void Modi::lagOfProgressRight() {
 		speed = Config::MIDDLE_SPEED;
 		angle = degree + 10;
 	}
-	
+	fixDrivingAngle();
+
 }
 
 void Modi::kickOff() {
@@ -60,6 +60,7 @@ void Modi::kickOff() {
   angle = degree;
 	
 	speed = Config::HIGH_SPEED;
+	fixDrivingAngle();
 }
 
 void Modi::setKickOffMode() {
@@ -79,7 +80,7 @@ void Modi::ballHolder() {
 	
 	if (distRight->rawData() > distLeft->rawData()) {
 		if (distRight->rawData() <= 40) {
-			angle =  30;
+			angle =  -30;
 
 		}
 		else if (distLeft->rawData() <= 40) {
@@ -93,7 +94,7 @@ void Modi::ballHolder() {
 	}
 	else {
 		if (distRight->rawData() <= 40) {
-			angle =  30;
+			angle =  -30;
 		}
 		else if (distLeft->rawData() <= 40) {
 		angle =  30;
@@ -103,7 +104,55 @@ void Modi::ballHolder() {
 		}
 	}
 
+	fixDrivingAngle();
+}
 
+void Modi::ballHolderFrontLeft() {
+	lastModi = "bHFL";
+	speed = Config::MIDDLE_SPEED;
+	
+	if (app->getStates().robotState() == Config::ROBOT_FRONT || 
+			app->getStates().robotState() == Config::ROBOT_FRONT_LEFT) {
+		angle = 100;
+	}
+	else {
+		angle = 80;
+	}
+
+	direction = 10;
+	fixDrivingAngle();
+	
+}
+
+void Modi::ballHolderFrontRight() {
+	lastModi = "bHFR";
+	speed = Config::MIDDLE_SPEED;
+	
+	if (app->getStates().robotState() == Config::ROBOT_FRONT || 
+			app->getStates().robotState() == Config::ROBOT_FRONT_RIGHT) {
+		angle = -100;
+	}
+	else {
+		angle = -80;
+	}
+
+	direction = -10;
+	fixDrivingAngle();
+}
+
+void Modi::ballHolderFront() {
+	if (robotAngle < 35 && robotAngle > -35) {
+		if (distLeft->rawData() > distRight->rawData()) {
+			ballHolderFrontLeft();
+		}
+		else {
+			ballHolderFrontRight();
+		}
+	}
+	else {
+		ballHolderFrontLeft();
+	}
+	
 }
 
 void Modi::offWall() {
@@ -119,116 +168,253 @@ void Modi::offWall() {
 	}
 	float robotAngle = app->getGeometry().normalizeAngle(bno->rawData());
 	angle = -robotAngle;
-	test = false;
+}
+
+void Modi::turnToBall() {
+	lastModi = "tB";
+	
+	if (degree < 15 && degree > -15) {
+		speed = Config::MIDDLE_SPEED;
+	}
+	else {
+		speed = -Config::LOW_SPEED;
+
+	}
+	
+	direction = degree + bno->rawData();
+
+	angle = robotAngle;
+}
+
+void Modi::toBallLeft() {
+	lastModi = "tBL";
+	
+	speed = Config::MIDDLE_SPEED;
+	
+	direction = degree + bno->rawData();
+
+	// Nah an der linken Wand
+	if (distLeft->rawData() <= 8)
+	{
+		angle = 10;
+		fixDrivingAngle();
+	}
+	else if (distLeft->rawData() > 8) {
+		angle = -10;
+ 		fixDrivingAngle();
+	}else{
+		angle = robotAngle;
+	}
+
 }
 
 String Modi::getLastMode() {
 	return lastModi;
 }
 
-void Modi::mode(float d, float s, float ir) {
+void Modi::fixDrivingAngle(){
+	angle = angle - robotAngle;
+}
+
+void Modi::mode(float d, float s) {
 	degree = d;
-	test = true;
 	direction = 0;
+
+	speed = Config::MIDDLE_SPEED;
+	bool newModi = true;
+
+	
+	robotAngle = bno->rawData();
+	robotAngle = app->getGeometry().normalizeAngle(robotAngle);
+	degree = degree - robotAngle;
+	
+	
+	//// === ROBOTER FRONT LEFT ===
+	//if (app->getStates().robotState() == Config::ROBOT_FRONT_LEFT) {
+	//	// === BALL HELD ===
+	//	if (app->getStates().ballState() == Config::BALL_HELD) {
+	//		ballHolderFrontLeft();
+	//	}
+	//	// === BACK LEFT ===
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
+	//		lagOfProgressLeft();
+	//	}
+	//	// === BACK RIGHT ===
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	// === FRONT LEFT ===
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT) {
+	//		turnToBall();
+	//	}
+	//	// === FRONT RIGHT ===
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT) {
+	//		turnToBall();
+	//	}
+	//	else {
+	//		newModi = false;
+	//	}
+	//}
+	//else if (app->getStates().robotState() == Config::ROBOT_BACK_LEFT) {
+	//	angle = 45;
+	//}
+	//else if (app->getStates().robotState() == Config::ROBOT_BACK_RIGHT) {
+	//	angle = -45;
+	//}
+	
+	//else if (app->getStates().robotState() == Config::ROBOT_FRONT_RIGHT) {
+	//	angle = -135;
+	//}	
+	//// === FRONT ===
+	//else if (app->getStates().robotState() == Config::ROBOT_FRONT) {
+	//	// === FRONT RIGHT ===
+	//	if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	// === FRONT LEFT ===
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT) {
+	//		lagOfProgressLeft();
+	//	}
+	//	// === BACK RIGHT ===
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	// === BACK LEFT ===
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
+	//		lagOfProgressLeft();
+	//	}
+	//	// === HELD ===
+	//	else if (app->getStates().ballState() == Config::BALL_HELD) {
+	//		ballHolderFront();
+	//	}
+	//	else {
+	//		newModi = false;
+	//	}
+		
+	//}
+	//else if (app->getStates().robotState() == Config::ROBOT_BACK) {
+	//	angle = 0;
+	//}
+	//else if (app->getStates().robotState() == Config::ROBOT_RIGHT) {
+	//	angle = -90;
+	//}
+	//// === LEFT ===
+	//else if (app->getStates().robotState() == Config::ROBOT_LEFT) {
+	//	// === BALL HELD ===
+	//	if (app->getStates().ballState() == Config::BALL_HELD) {
+	//		ballHolder();
+	//	}
+	//	// === BACK LEFT ===
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
+	//		lagOfProgressLeft();
+	//	}
+	//	// === BACK RIGHT ===
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	// === FRONT LEFT ===
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT) {
+	//		toBallLeft();
+	//	}
+	//	// === FRONT RIGHT ===
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	else {
+	//		newModi = false;
+	//	}
+	
+		
+	//}
+	//else if (app->getStates().robotState() == 0) {
+	//	if (app->getStates().ballState() == Config::BALL_HELD) {
+	//		ballHolder();
+	//	}
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
+	//		lagOfProgressLeft();
+	//	}
+	//	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT) {
+	//		lagOfProgressLeft();
+	//	}
+	//	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT) {
+	//		lagOfProgressRight();
+	//	}
+	//	else {
+	//		newModi = false;
+	//	}
+
+	//}	
+
+
 	if (app->getStates().ballState() == Config::BALL_HELD) {
-		ballHolder();
+			ballHolder();
 	}
-	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT && distRight->rawData() <= 15.0f) {
-		offWall();
-	}
-	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT && distLeft->rawData() <= 15.0f) {
-		offWall();
-	}
-  else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
+	else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
 		lagOfProgressLeft();
 	}
 	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
 		lagOfProgressRight();
 	}
-	else if (lastModi == "oW") {
-		digitalWrite(LED_BUILTIN, HIGH);
-		offWall();
+	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT) {
+		lagOfProgressLeft();
 	}
-	else if (lastModi == "bH") {
-		ballHolder();
+	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT) {
+		lagOfProgressRight();
+	}
+	else {
+		newModi = false;
+	}
+
+
+	if (newModi == false) {
+		if (lastModi == "oW") {
+			digitalWrite(LED_BUILTIN, HIGH);
+			offWall();
+		}
+		else if (lastModi == "bH") {
+			ballHolder();
+			
+		}
+		else if (lastModi == "kO") {
+			kickOff();
+		}
+		else if (lastModi == "lOPR") {
+			lagOfProgressRight();
+		} 
+		else if (lastModi == "lOPL") {
+			lagOfProgressLeft();
+		}
+		else if (lastModi == "tB") {
+			turnToBall();
+		}
+		else if (lastModi == "bHFL") {
+			ballHolderFrontLeft();
+		}
+		else if (lastModi == "bHFR") {
+			ballHolderFrontRight();
+		}
+		else if (lastModi == "tBL") {
+			toBallLeft();
+		}
 		
 	}
-	else if (lastModi == "kO") {
-		kickOff();
-	}
-	else if (lastModi == "lOPR") {
-		lagOfProgressRight();
-	} 
-	else if (lastModi == "lOPL") {
-    lagOfProgressLeft();
-	}
-	if (test == true) {
-		digitalWrite(LED_BUILTIN, LOW);
-		if (angle <= 180 && angle >= 0)
-		{
-			if (distRight->rawData() <= 14)
-			{
-				speed = 0.4;
-				if (angle <= 90)
-				{
-					angle = 0;
-				}
-				else {
-					
-					angle = -90;
-				}
-				angle += direction;
-			}
-		}
-		else if (angle <= 0 && angle >= -180)
-		{
-			if (distLeft->rawData() <= 14)
-			{
-				speed = 0.4;
-				if (angle >= -90)
-				{
-					angle = 0;
-				}
-				else {
-					angle = 90;
-				}
-				angle += direction;
-			}
-		}
-		else if (angle <= -90 || angle >= 90)
-		{
-			
-			if (distBack->rawData() <= 35)
-			{
-				speed = 0.4;
-				if (angle <= -90)
-				{
-					angle = -90;
-				}
-				else {
-					angle = 90;
-				}
-				angle += direction;
-			}
-			else if(distBack->rawData() <= 55 || distBack->rawData() == 1000) {
-				speed = 0.6;
-			}
-		}
-	}
-	
 
-
-  
-	if (s == 0 ) {
+	if (s == 0) {
 		speed = 0;
 	}
+	
+	lastRobotState = app->getStates().ballState();
 
-	if (!(lastModi == "bH")) {
-		lastTime = millis();
-	}
+	degree = app->getGeometry().normalizeAngle(degree);
 
-	//angle = angle - bno->rawData();
-	//angle = app->getGeometry().normalizeAngle(angle);
+	
+
+	while (angle > 180) angle -= 360;
+	while (angle < -180) angle += 360;
+
 
 	app->getDrivingControl().drive(angle, speed, app->getRotationControl().getRotation(direction));
 }

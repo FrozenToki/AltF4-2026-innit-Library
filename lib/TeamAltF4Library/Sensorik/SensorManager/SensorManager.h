@@ -7,6 +7,7 @@
 #include "Sensorik/SensorBase/IrSensors/IrSensors.h"
 #include "Sensorik/SensorBase/IrRing/IrRing.h"
 #include "Sensorik/SensorBase/ButtonCross/ButtonCross.h"
+#include "Sensorik/SensorBase/EZ/EZ.h"
 
 // forward declaration
 class Application; 
@@ -39,5 +40,8 @@ public:
 
 	void createButtonCross(String n, int pin, float v1, float v2, float v3, float v4, float v5);
 	ButtonCross* getButtonCrossByName(String n);
+
+	void createEZ(int p, String n);
+	EZ* getEZByName(String n);
 };
 

@@ -18,5 +18,7 @@ public:
 	void print(float v1, float v2, float v3);
 	void print(String v1, String v2, String v3);
 
+	void resetConnection();
+
 	void clear();
 };
