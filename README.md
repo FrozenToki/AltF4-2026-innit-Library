@@ -7,7 +7,7 @@ We compete in **RoboCup Junior Soccer – 1v1 Lightweight** and develop our own 
 
 ---
 
-## Programm of the Rp 2040 Zero:
+## Programm of the Rp 2040 Zero for the Ball detection:
 
 https://github.com/FrozenToki/AltF4-2026-rp-Library
 
