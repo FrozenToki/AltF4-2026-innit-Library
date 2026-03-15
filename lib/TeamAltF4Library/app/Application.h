@@ -17,6 +17,7 @@
 #include "States/States.h"
 #include "MenuManager/MenuManager.h"
 #include "GameMode/GameMode.h"
+#include "Sensorik/Calibration/Calibration.h"
 
 // Used to get acces to all the parts of the library from anywhere in the programm.
 // It has instances of all the different main parts of the library.
@@ -50,6 +51,8 @@ private:
 	MenuManager menuManager;
 
 	GameMode gameMode;
+
+	Calibration calibration;
 public:
 	SensorList& getSensorList();
 	SensorManager& getSensorManager();
@@ -79,6 +82,8 @@ public:
 	MenuManager& getMenuManager();
 
 	GameMode& getGameMode();
+
+	Calibration& getCalibration();
 
 	void softwareReset();
 

@@ -21,7 +21,7 @@ private:
 	std::vector<String> modeNames;
 
 	int lastMode = 0;
-	int mode = 0;
+	unsigned mode = 0;
 
 	int inMode = false;
 public: 

@@ -55,4 +55,11 @@ private:
 	String lastModi = "";
 
 	float robotAngle = 0;
+
+	bool fixDrivingAngl = false;
+
+	float lastDirection = 0;
+
+	float lastDirectionTime = 0;
+
 };

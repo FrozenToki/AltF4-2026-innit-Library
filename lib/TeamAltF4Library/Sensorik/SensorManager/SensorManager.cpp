@@ -2,7 +2,7 @@
 #include "app/Application.h"
 
 SensorManager::SensorManager(Application* a) : app(a) {
-	this->createBno055(19, Config::GYRO_NAME);
+	this->createBno055(255, Config::GYRO_NAME);
 	
 	this->createSr04(5,4,Config::RIGHT_DIST_NAME);
 	this->createSr04(29, 28, Config::LEFT_DIST_NAME);

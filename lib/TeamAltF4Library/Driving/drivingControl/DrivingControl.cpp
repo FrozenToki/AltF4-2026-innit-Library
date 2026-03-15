@@ -1,10 +1,16 @@
 #include "DrivingControl.h"
 #include "app/Application.h"
 
-DrivingControl::DrivingControl(Application* a) : app(a) {}
+DrivingControl::DrivingControl(Application* a) : app(a) {
+	ring = app->getSensorManager().getIrRingByName(Config::IR_RING_NAME);
+	distanceThreshold = EEPROM.get(1, distanceThreshold);
+}
 
 void DrivingControl::drive(float angle, float motorSpeed, float rotation) {
-    float speedY = cos(angle * (PI / 180.0));
+  
+	motorSpeed = motorSpeed * getAmpFactor();
+	
+	float speedY = cos(angle * (PI / 180.0));
     float speedX = sin(angle * (PI / 180.0));
     speedY = speedY * motorSpeed;
     speedX = speedX * motorSpeed;
@@ -61,4 +67,53 @@ void DrivingControl::turnOff() {
 	frontLeft->turnOff();
 	back->turnOff();
 	frontRight->turnOff();
+}
+
+void DrivingControl::setDistanceThreshold(float dist) {
+	distanceThreshold = dist;
+	EEPROM.put(1, distanceThreshold);
+}
+
+float DrivingControl::getAmpFactor() {
+	frontLeft->updateAmperUsage();
+	back->updateAmperUsage();
+	frontRight->updateAmperUsage();
+	
+
+	if (frontRight->getAmperUsage() > 1.1 || back->getAmperUsage() > 1.1 || frontLeft->getAmperUsage() > 1.1) {
+		if (ampFactor <= 0) {
+			ampFactor = 0;
+		}
+		else {
+			ampFactor -= 0.02;
+		}
+	}
+	//else if ((frontLeft->getAmperUsage() + back->getAmperUsage() + frontRight->getAmperUsage()) > 6) {
+	//	if (ampFactor <= 0) {
+	//		ampFactor = 0;
+	//	}
+	//	else {
+	//		ampFactor -= 0.02;
+	//	}
+	//}
+	else {
+		if (ampFactor >= 1) {
+			ampFactor = 1;
+		}
+		else {
+			ampFactor += 0.02;
+		}
+	}
+
+	//float ringStrenght = ring->getStrength() * 8;
+ 
+	//float distanceRaw = ((1/sqrt(ringStrenght)) * 2000);
+	//float distance = (distanceRaw -  65)*2;
+
+	//if (distance > 40) {
+	//	digitalWrite(LED_BUILTIN,HIGH);
+	//	return 1;
+	//}
+	//digitalWrite(LED_BUILTIN,LOW);
+	return ampFactor;
 }

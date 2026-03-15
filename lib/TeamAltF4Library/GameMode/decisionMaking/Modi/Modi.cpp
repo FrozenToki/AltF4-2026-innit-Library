@@ -68,6 +68,7 @@ void Modi::setKickOffMode() {
 }
 
 unsigned long lastTime = 0;
+float lastAngle = 0;
 
 void Modi::ballHolder() {
 	lastModi = "bH";
@@ -79,12 +80,14 @@ void Modi::ballHolder() {
 	}
 	
 	if (distRight->rawData() > distLeft->rawData()) {
-		if (distRight->rawData() <= 40) {
+		if (distRight->rawData() <= 100) {
 			angle =  -30;
 
+
 		}
-		else if (distLeft->rawData() <= 40) {
+		else if (distLeft->rawData() <= 100) {
 		angle =  30;
+
 
 		}
 		else {
@@ -93,14 +96,17 @@ void Modi::ballHolder() {
 
 	}
 	else {
-		if (distRight->rawData() <= 40) {
+		if (distRight->rawData() <= 100) {
 			angle =  -30;
+
 		}
-		else if (distLeft->rawData() <= 40) {
+		else if (distLeft->rawData() <= 100) {
 		angle =  30;
+
 		}
 		else {
 			angle = degree;
+			direction = 0;
 		}
 	}
 
@@ -213,20 +219,22 @@ String Modi::getLastMode() {
 }
 
 void Modi::fixDrivingAngle(){
-	angle = angle - robotAngle;
+	//angle = angle - robotAngle;
 }
 
 void Modi::mode(float d, float s) {
 	degree = d;
 	direction = 0;
 
+	fixDrivingAngl = true;
+
 	speed = Config::MIDDLE_SPEED;
 	bool newModi = true;
 
 	
-	robotAngle = bno->rawData();
-	robotAngle = app->getGeometry().normalizeAngle(robotAngle);
-	degree = degree - robotAngle;
+	//robotAngle = bno->rawData();
+	//robotAngle = app->getGeometry().normalizeAngle(robotAngle);
+	//degree = degree - robotAngle;
 	
 	
 	//// === ROBOTER FRONT LEFT ===
@@ -348,30 +356,112 @@ void Modi::mode(float d, float s) {
 
 	//}	
 
-
+	
 	if (app->getStates().ballState() == Config::BALL_HELD) {
-			ballHolder();
+		ballHolder();
 	}
-	else if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
+	if (app->getStates().ballState() == Config::BALL_BACK_LEFT) {
 		lagOfProgressLeft();
 	}
 	else if (app->getStates().ballState() == Config::BALL_BACK_RIGHT) {
-		lagOfProgressRight();
-	}
-	else if (app->getStates().ballState() == Config::BALL_FRONT_LEFT) {
-		lagOfProgressLeft();
-	}
-	else if (app->getStates().ballState() == Config::BALL_FRONT_RIGHT) {
 		lagOfProgressRight();
 	}
 	else {
 		newModi = false;
 	}
 
+	if (app->getStates().robotState() == Config::ROBOT_BACK) {
+		if (angle < -90 ) {
+			if (distBack->rawData() <  8) {
+				angle = -80;
+			}
+			else {
+				angle = -100;
+			}
+			fixDrivingAngle();
+		}
+		else if (angle > 90) {
+			if (distBack->rawData() <  8) {
+				angle = 80;
+			}
+			else {
+				angle = 100;
+			}
+			fixDrivingAngle();
+		}
+	}
+
+	if (app->getStates().robotState() == Config::ROBOT_RIGHT) {
+		if (angle > 90 ) {
+			if (distRight->rawData() <  8) {
+				angle = -170;
+			}
+			else {
+				angle = 170;
+			}
+			fixDrivingAngle();
+		}
+		else if (angle < -145) {
+			
+			angle = -135;
+			
+			fixDrivingAngle();
+		}
+	}
+
+	if (app->getStates().robotState() == Config::ROBOT_LEFT) {
+		if (angle < -90 ) {
+			if (distLeft->rawData() <  8) {
+				angle = 170;
+			}
+			else {
+				angle = -170;
+			}
+			fixDrivingAngle();
+		}
+		else if (angle > 145) {
+			
+			angle = 135;
+			
+			fixDrivingAngle();
+		}
+	}
+
+	//if (app->getStates().robotState() == Config::ROBOT_FRONT_LEFT) {
+	//	angle = 135;
+	//}
+	//else if (app->getStates().robotState() == Config::ROBOT_FRONT_RIGHT) {
+	//	angle = -135;
+	//}
+	//else if ( app->getStates().robotState() == Config::ROBOT_FRONT) {
+	//	if (angle > -90 && angle <= 0) {
+	//		angle = -95;
+	//	}
+	//	else if (angle < 90 && angle >= 0) {
+	//		angle =  95;
+	//	}
+	//}
+
+
+
+
+	
+		//if (app->getStates().robotState() == Config::ROBOT_BACK_LEFT && distRight->rawData() > 75) {
+		//	if (angle < -65) {
+		//		angle = angle + 180;
+		//	}
+		//}
+		//else if (app->getStates().robotState() == Config::ROBOT_BACK_RIGHT && distLeft->rawData() > 75) {
+		//	if (angle > 65) {
+		//		angle = angle - 180;
+		//	}
+		//}
+
+	//}
+
 
 	if (newModi == false) {
 		if (lastModi == "oW") {
-			digitalWrite(LED_BUILTIN, HIGH);
 			offWall();
 		}
 		else if (lastModi == "bH") {
@@ -414,6 +504,31 @@ void Modi::mode(float d, float s) {
 
 	while (angle > 180) angle -= 360;
 	while (angle < -180) angle += 360;
+
+
+
+
+	//if (!(lastDirection == direction)) {
+	//	if (lastDirectionTime - millis() >50) {
+	//		if (direction > lastDirection) {
+	//			newDirection = lastDirection + 1;
+	//		}
+	//		else if (direction < lastDirection) {
+	//			newDirection = lastDirection + -1;
+	//		}
+	//	}
+	//	else {
+	//		newDirection = lastDirection;
+	//	}
+		
+	//}
+	//else {
+	//	newDirection = direction;
+	//}
+
+	//lastDirection = newDirection;
+
+
 
 
 	app->getDrivingControl().drive(angle, speed, app->getRotationControl().getRotation(direction));

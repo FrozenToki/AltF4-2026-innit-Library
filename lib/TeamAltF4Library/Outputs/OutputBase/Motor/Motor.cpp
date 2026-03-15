@@ -1,11 +1,12 @@
 #include "Motor.h"
 
-Motor::Motor(int inA, int inB, int pwm, String n) : OutputBase(n), pinInA(inA), pinInB(inB), pinPwm(pwm) {
+Motor::Motor(int inA, int inB, int pwm, int amp, String n, bool turnDirection) : OutputBase(n), pinInA(inA), pinInB(inB), pinPwm(pwm), pinAmp(amp), turnD(turnDirection) {
     type = MOTOR;
 
     pinMode(pinInA, OUTPUT);
     pinMode(pinInB, OUTPUT);
     pinMode(pinPwm, OUTPUT);
+		pinMode(pinAmp, INPUT);
 }
 
 void Motor::turnOn(float speed) {
@@ -20,12 +21,26 @@ void Motor::turnOn(float speed) {
     }
     
     if (direction == Config::FORWARDS) {
-        digitalWrite(pinInB, HIGH);
+			if (turnD) {
+				digitalWrite(pinInB, HIGH);
         digitalWrite(pinInA, LOW);
+			}
+			else {
+				digitalWrite(pinInB, LOW);
+        digitalWrite(pinInA, HIGH);
+			}
+        
     } 
     else if (direction == Config::BACKWARDS) {
-        digitalWrite(pinInB, LOW);
+			if (turnD) {
+				digitalWrite(pinInB, LOW);
         digitalWrite(pinInA, HIGH);
+			}
+			else {
+				digitalWrite(pinInB, HIGH);
+        digitalWrite(pinInA, LOW);
+			}
+        
     }
     int calculatedSpeed = (int)(speed * 255.0f + 0.5f);
     analogWrite(pinPwm, calculatedSpeed);
@@ -37,3 +52,15 @@ void Motor::turnOff() {
     analogWrite(pinPwm, 0);
 }
 
+void Motor::updateAmperUsage()  {
+	int raw = analogRead(pinAmp);
+
+  float voltage = raw * 3.3 / 1023.0;
+  float current = voltage / 0.14;
+
+	amperUsage = current;
+}
+
+float Motor::getAmperUsage() {
+	return amperUsage;
+}

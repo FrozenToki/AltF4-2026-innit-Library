@@ -4,7 +4,7 @@ Ssd1306::Ssd1306(String n) : OutputBase(n) {
 	display = new Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire1, OLED_RESET);
 
 	Wire1.begin();
-	if (!display->begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS)) while(1);
+	display->begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS);
 
 	display->clearDisplay();
 	display->setTextColor(SSD1306_WHITE);
@@ -46,7 +46,7 @@ void Ssd1306::print(String v1, String v2, String v3) {
 }
 
 void Ssd1306::resetConnection() {
-	if (!display->begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS)) while(1);
+	display->begin(SSD1306_SWITCHCAPVCC, OLED_ADDRESS);
 
 	display->clearDisplay();
 	display->setTextColor(SSD1306_WHITE);

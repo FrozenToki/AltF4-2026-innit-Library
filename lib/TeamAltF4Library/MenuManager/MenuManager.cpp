@@ -8,8 +8,8 @@ MenuManager::MenuManager(Application *a) : app(a) {
 
 	greenButton = app->getSensorManager().getButtonByName(Config::GREEN_BUTTON_NAME);
 
-	modes.reserve(5);
-	modeNames.reserve(5);
+	modes.reserve(10);
+	modeNames.reserve(10);
 }
 
 void MenuManager::addMenuItem(String n, void (*mode)()) {
@@ -42,7 +42,13 @@ void MenuManager::loop() {
 			while (buttonCross->pressed(1)){
 				buttonCross->update();
 			}
-			mode -= 1;
+			if (mode == 0) {
+				mode = modes.size() - 1;
+			}
+			else {
+				mode -= 1;
+			}
+			
 		}
 		else if (buttonCross->pressed(3)) {
 			while (buttonCross->pressed(3)){
@@ -51,10 +57,8 @@ void MenuManager::loop() {
 			mode += 1;
 		}
 
-		if (mode == -1) {
-			mode = modes.size() - 1;
-		}
-		else if (mode == modes.size()) {
+
+		if (mode == modes.size()) {
 			mode = 0;
 		}
 

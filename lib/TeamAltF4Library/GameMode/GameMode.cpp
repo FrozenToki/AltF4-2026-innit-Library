@@ -49,7 +49,7 @@ void GameMode::loop() {
 	if(digitalRead(9)== HIGH) {
 		
 		app->getModi().mode(degree, strength);
-		display->print("___",app->getModi().getLastMode(), "___");
+		display->print(motor1->getAmperUsage(),app->getModi().getLastMode(), String(app->getDrivingControl().getAmpFactor()));
 		
 	} 
 	else {
@@ -66,8 +66,8 @@ void GameMode::loop() {
 		
 		app->getDrivingControl().turnOff();
 		buttonCross->update();
-		display->print(app->getGeometry().normalizeAngle(bno->rawData()), app->getStates().robotState() ,distLeft->rawData());
-
+		//display->print(app->getGeometry().normalizeAngle(bno->rawData()), app->getStates().robotState() ,distRight->rawData());
+		display->print(distLeft->rawData(), distRight->rawData(), 0);
 	}
 	
 	

@@ -5,9 +5,9 @@
 OutputManager::OutputManager(Application* a) : app(a) {
 	this->createSsd1306(Config::DISPLAY_NAME);
 
-	this->createMotor(21, 20, 10, Config::MOTOR_VL_NAME);
-	this->createMotor(32, 33, 11, Config::MOTOR_BA_NAME);
-	this->createMotor(36, 38, 12, Config::MOTOR_VR_NAME);
+	this->createMotor(21, 30, 10, 20, Config::MOTOR_VL_NAME, false);
+	this->createMotor(32, 33, 11, 22, Config::MOTOR_BA_NAME);
+	this->createMotor(36, 38, 12, 23, Config::MOTOR_VR_NAME);
 }
 
 // === LED ===
@@ -29,8 +29,8 @@ Led* OutputManager::getLedByName(String n) {
 
 // === MOTOR ===
 
-void OutputManager::createMotor(int pInA, int pInB, int pPwm, String n) {
-	Motor* l = new Motor(pInA, pInB, pPwm, n);
+void OutputManager::createMotor(int pInA, int pInB, int pPwm, int pAmp, String n, bool turnDirection) {
+	Motor* l = new Motor(pInA, pInB, pPwm,pAmp, n, turnDirection);
 	app->getOutputList().addOutput(l);
 }
 

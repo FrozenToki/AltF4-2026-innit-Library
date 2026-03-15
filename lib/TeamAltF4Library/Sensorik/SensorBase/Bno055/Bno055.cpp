@@ -4,28 +4,53 @@ Bno055::Bno055(int p, String n) : SensorBase(p, n) {
 	type = BNO055;
 	bno = Adafruit_BNO055(55, 0x28, &Wire2);
 	Wire2.begin() ;
-	if (!bno.begin()) {
-		while (true) {
-			digitalWrite(LED_BUILTIN, HIGH);
-			delay(100);
-			digitalWrite(LED_BUILTIN, LOW);
-			delay(100);
-		}
+	Wire2.setClock(10000);
+
+	if (!bno.begin(OPERATION_MODE_IMUPLUS)) {
+		//while (true) {
+		//	digitalWrite(LED_BUILTIN, HIGH);
+		//	delay(100);
+		//	digitalWrite(LED_BUILTIN, LOW);
+		//	delay(100);
+		//}
+		delay(1000);
 		
 	}
-	bno.setExtCrystalUse(true);
-	delay(100);
-	bno.setMode(OPERATION_MODE_IMUPLUS);
 
 	
+	Wire2.setTimeout(10);
+	bno.setExtCrystalUse(true);
+	delay(100);
+
+	delay(10);
 }
 
 
 void Bno055::update() {
+	sensors_event_t event;
 
-	imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+	if(!bno.getEvent(&event, Adafruit_BNO055::VECTOR_EULER)){
+    return;
+	}
 
-	float raw = euler.x();  
+	//imu::Vector<3> euler = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
+
+	
+	
+	float raw;
+	raw = event.orientation.x;
+
+	
+	//if (isnan(euler.x())) {
+	//	return;
+	//}
+	//else {
+	//	raw = euler.x();  
+	//}
+
+	
+
+	
 
 	
 	raw -= calibratedValue;
@@ -38,10 +63,18 @@ void Bno055::update() {
 	if (diff > 180)  diff -= 360;
 	if (diff < -180) diff += 360;
 
+	//if (abs(diff) > 90) {
+  //  return;
+	//}
+
 	continuousAngle += diff;
 	lastAngle = raw;
 
+
+
 	value = raw;
+
+
 }
 
 

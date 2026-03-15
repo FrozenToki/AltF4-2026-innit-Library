@@ -3,7 +3,7 @@
 Application::Application() : sensorManager(this), sensorList(this), 
 	outputManager(this), outputList(this), errorMessages(this), drivingControl(this),
 	rotationControl(this), serialComm(this), geometry(this), loops(this), modi(this), 
-	irSensorReader(this), states(this), menuManager(this), gameMode(this) {} 
+	irSensorReader(this), states(this), menuManager(this), gameMode(this), calibration(this) {} 
 
 SensorList& Application::getSensorList() {
 	return sensorList;
@@ -68,6 +68,10 @@ MenuManager& Application::getMenuManager() {
 
 GameMode& Application::getGameMode() {
 	return gameMode;
+}
+
+Calibration& Application::getCalibration() {
+	return calibration;
 }
 
 void Application::softwareReset() {

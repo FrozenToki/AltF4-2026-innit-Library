@@ -22,7 +22,7 @@ public:
 	// as an instance of the led class. 
 	Led* getLedByName(String n);
 
-	void createMotor(int pInA, int pInB, int pPwm, String n); 
+	void createMotor(int pInA, int pInB, int pPwm, int pAmp, String n, bool turnDirection = true); 
 	Motor* getMotorByName(String n);
 
 	void createSsd1306(String n);
