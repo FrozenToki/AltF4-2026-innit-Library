@@ -8,7 +8,6 @@ SerialComm::SerialComm(Application* a, Stream& ser, unsigned long RepeatingSendI
 
 
 
-
 void SerialComm::sendRepeatingData() {
 	unsigned long currentMillis = millis();
 	if (currentMillis - lastSendTimeRepeating >= repeatingSendInterval) {
