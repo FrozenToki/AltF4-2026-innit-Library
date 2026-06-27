@@ -3,12 +3,15 @@
 #include "Config/Config.h"
 #include "Sensorik/SensorBase/SR04/Sr04.h"
 #include "Sensorik/SensorBase/Bno055/Bno055.h"
+#include "States/States.h"
 
-class Application;
+class ApplicationInnit;
 
 class Modi {
 public:
-	Modi(Application* a);
+	Modi(ApplicationInnit* a);
+
+	
 
 	void mode(float d, float s);
 
@@ -20,22 +23,15 @@ public:
 	void setKickOffMode();
 
 	void ballHolder();
-	void ballHolderFrontLeft();
-	void ballHolderFrontRight();
-	void ballHolderFront();
 
-	void offWall();
-
-	void turnToBall();
-	
-	void toBallLeft();
 
 	String getLastMode();
 
-	void fixDrivingAngle();
 
 private:
-  Application* app;
+  ApplicationInnit* app;
+
+	States states;
 	float angle = 0;
 	float speed = 0;
 	float degree = 0;

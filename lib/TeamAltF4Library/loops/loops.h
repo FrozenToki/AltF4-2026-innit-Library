@@ -3,15 +3,15 @@
 #include "Sensorik/SensorManager/SensorManager.h"
 #include "Config/Config.h"
 
-class Application;
+class ApplicationInnit;
 
 class Loops {
 	public: 
-		Loops(Application* a);
+		Loops(ApplicationInnit* a);
 		void readDistance();
 
 	private:
-		Application* app;
+		ApplicationInnit* app;
 		
 		Sr04* distRight;
 		Sr04* distBack;

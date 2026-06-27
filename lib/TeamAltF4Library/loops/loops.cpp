@@ -1,8 +1,8 @@
 #include "loops.h"
-#include "app/Application.h"
+#include "app/ApplicationInnit.h"
 
 
-Loops::Loops (Application* a) : app(a) {
+Loops::Loops (ApplicationInnit* a) : app(a) {
 	distRight = app->getSensorManager().getSr04ByName(Config::RIGHT_DIST_NAME);
 	distBack = app->getSensorManager().getSr04ByName(Config::BACK_DIST_NAME);
 	distLeft = app->getSensorManager().getSr04ByName(Config::LEFT_DIST_NAME);
@@ -49,22 +49,7 @@ void Loops::readDistance() {
 		default:
 			break;
 		}
-		//if (status == 0)
-		//{
-		//	distRight->update();
-		//	ezVL->update();
-		//	status = 1;
-		//}
-		//else if (status == 1) {
-		//	distBack->update();
-		//	ezV->update();
-		//	status = 2;
-		//}
-		//else {
-		//	distLeft->update();
-		//	ezVR->update();
-		//	status = 0;
-		//}
+
 	}
 	
 }

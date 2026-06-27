@@ -2,6 +2,9 @@
 #include <Arduino.h>
 #include "Sensorik/SensorManager/SensorManager.h"
 #include "Outputs/OutputManager/OutputManger.h"
+#include "Config/Config.h"
+#include "loops/loops.h"
+#include "GameMode/decisionMaking/Modi/Modi.h"
 
 class Application;
 
@@ -10,7 +13,11 @@ private:
 	float degree = 0;
 	float strength = 0;
 
-	Application* app;
+	ApplicationInnit* app;
+
+	Loops loops;
+	
+	Modi modi;
 
 	IrRing* ring;
 
@@ -29,8 +36,10 @@ private:
 	Motor* motor3;
 
 	ButtonCross* buttonCross;
+
+	float lastTime = 0;
 public:
-	GameMode(Application* a);
+	GameMode(ApplicationInnit* a);
 
 	void loop();
 };

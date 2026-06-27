@@ -3,18 +3,18 @@
 #include "Sensorik/SensorBase/IrRing/IrRing.h"
 #include "config/Config.h"
 #include "Sensorik/SensorBase/Bno055/Bno055.h"
-#include "Geometry/Geometry.h"
+#include "Math/Geometry/Geometry.h"
 #include "Sensorik/SensorBase/IrSensors/IrSensors.h"
 #include <EEPROM.h>
 #include "MovingAverage/MovingAverage.h"
 #include "Sensorik/SensorManager/SensorManager.h"
 
-class Application;
+class ApplicationInnit;
 
 
 class States {
 private: 
-	Application* app;
+	ApplicationInnit* app;
 	
 	// === BALL_STATE ===
 	IrRing* irRing;
@@ -46,7 +46,7 @@ private:
 	
 	
 public: 
-	States(Application* a);
+	States(ApplicationInnit* a);
 	int ballState();
 
 	int getBallInHolderThreshould();

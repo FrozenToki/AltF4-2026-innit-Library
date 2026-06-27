@@ -1,7 +1,7 @@
 #include "States.h"
-#include "app/Application.h"
+#include "app/ApplicationInnit.h"
 
-States::States(Application *a) : app(a) {
+States::States(ApplicationInnit *a) : app(a) {
 
 	EEPROM.get(0, ballInHolderThreshould);
 	irRing = app->getSensorManager().getIrRingByName(Config::IR_RING_NAME);

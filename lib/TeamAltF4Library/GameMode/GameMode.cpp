@@ -1,7 +1,8 @@
 #include "GameMode.h"
-#include "app/Application.h"
+#include "app/ApplicationInnit.h"
 
-GameMode::GameMode(Application *a) : app(a) {
+
+GameMode::GameMode(ApplicationInnit *a) : app(a),loops(a), modi(a) {
 
 	motor1 = app->getOutputManager().getMotorByName(Config::MOTOR_VL_NAME);
 	motor2 = app->getOutputManager().getMotorByName(Config::MOTOR_BA_NAME);
@@ -27,9 +28,12 @@ GameMode::GameMode(Application *a) : app(a) {
 }
 
 void GameMode::loop() {
+	float loopTime5 = micros() - lastTime;
+	lastTime = micros();
 	
 	// Infrarot Sensoren lesen
 	ring->update();
+	
 
 	// Position des Balles
 	degree = app->getGeometry().normalizeAngle(ring->getAngle());
@@ -43,33 +47,37 @@ void GameMode::loop() {
 	bno->update();
 
 	// Abstandssensoren lesen
-  app->getLoops().readDistance();
+  loops.readDistance();
+
+	float loopTime4 = micros() - lastTime;
+	lastTime = micros();
 
 	// Hauptschalter
 	if(digitalRead(9)== HIGH) {
 		
-		app->getModi().mode(degree, strength);
-		display->print(motor1->getAmperUsage(),app->getModi().getLastMode(), String(app->getDrivingControl().getAmpFactor()));
+		modi.mode(degree, strength);
 		
+		lastTime = micros();
+		//display->print(motor1->getAmperUsage(),app->getModi().getLastMode(), String(app->getDrivingControl().getAmpFactor()));
+		display->print(0,loopTime5,loopTime4);
 	} 
 	else {
 
-		buttonCross->update();
-		if(buttonCross->pressed(2)) {
-			while (buttonCross->pressed(2)) {
-				buttonCross->update();
-			}
-			app->getModi().setKickOffMode();
-			// GryoSensor kalibrieren
-			bno->calibrate();
-		}
+		//buttonCross->update();
+		//if(buttonCross->pressed(2)) {
+		//	while (buttonCross->pressed(2)) {
+		//		buttonCross->update();
+		//	}
+		//	app->getModi().setKickOffMode();
+		//	// GryoSensor kalibrieren
+		//	bno->calibrate();
+		//}
 		
-		app->getDrivingControl().turnOff();
-		buttonCross->update();
-		//display->print(app->getGeometry().normalizeAngle(bno->rawData()), app->getStates().robotState() ,distRight->rawData());
-		display->print(distLeft->rawData(), distRight->rawData(), 0);
+		//app->getDrivingControl().turnOff();
+		//buttonCross->update();
+		////display->print(app->getGeometry().normalizeAngle(bno->rawData()), app->getStates().robotState() ,distRight->rawData());
+		//display->print(distLeft->rawData(), distRight->rawData(), 0);
 	}
-	
-	
+
 	//display->print(bno->getContinuousAngle(), app->getRotationControl().getRotation(-90), strength);
 }
