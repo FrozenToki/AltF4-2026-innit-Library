@@ -1,6 +1,6 @@
 #pragma once
 #include <Arduino.h>
-#include "Sensorik/SensorBase/IrRing/IrRing.h"
+#include "Sensorik/SensorBase/SerialReciever/SerialReciever.h"
 #include "config/Config.h"
 #include "Sensorik/SensorBase/Bno055/Bno055.h"
 #include "Math/Geometry/Geometry.h"
@@ -17,7 +17,7 @@ private:
 	ApplicationInnit* app;
 	
 	// === BALL_STATE ===
-	IrRing* irRing;
+	SerialReciever* irRing;
 	
 	Bno055* bno055;
 

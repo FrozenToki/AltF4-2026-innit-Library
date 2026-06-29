@@ -4,7 +4,7 @@
 States::States(ApplicationInnit *a) : app(a) {
 
 	EEPROM.get(0, ballInHolderThreshould);
-	irRing = app->getSensorManager().getIrRingByName(Config::IR_RING_NAME);
+	irRing = app->getSensorManager().getSerialRecieverByName(Config::IR_RING_NAME);
 	bno055 = app->getSensorManager().getBno055ByName(Config::GYRO_NAME);
 	irFR = app->getSensorManager().getIrSensorByName(Config::IR_SENS_RIGHT_NAME);
 	irFL = app->getSensorManager().getIrSensorByName(Config::IR_SENS_LEFT_NAME);
@@ -25,7 +25,7 @@ States::States(ApplicationInnit *a) : app(a) {
 }
 
 int States::ballState() {
-	float ballAngle = irRing->getAngle();
+	float ballAngle = irRing->getValue(1);
 	ballAngle = app->getGeometry().normalizeAngle(ballAngle);
 	float robotAngle = bno055->rawData();
 	robotAngle = app->getGeometry().normalizeAngle(robotAngle);

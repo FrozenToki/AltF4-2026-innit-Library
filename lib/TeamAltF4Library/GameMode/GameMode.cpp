@@ -16,7 +16,7 @@ GameMode::GameMode(ApplicationInnit *a) : app(a),loops(a), modi(a) {
 	distLeft  = app->getSensorManager().getSr04ByName(Config::LEFT_DIST_NAME);
 	distBack  = app->getSensorManager().getSr04ByName(Config::BACK_DIST_NAME);
 	
-	ring = app->getSensorManager().getIrRingByName(Config::IR_RING_NAME);
+	ring = app->getSensorManager().getSerialRecieverByName(Config::IR_RING_NAME);
 	
 	bno = app->getSensorManager().getBno055ByName(Config::GYRO_NAME); 
 
@@ -36,8 +36,8 @@ void GameMode::loop() {
 	
 
 	// Position des Balles
-	degree = app->getGeometry().normalizeAngle(ring->getAngle());
-	strength = ring->getStrength();
+	degree = app->getGeometry().normalizeAngle(ring->getValue(1));
+	strength = ring->getValue(2);
 
   // Ballhalter Sensoren lesen
 	app->getIrSensorReader().readAll(30000, false, 0);

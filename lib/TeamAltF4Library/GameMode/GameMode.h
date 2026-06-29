@@ -19,7 +19,7 @@ private:
 	
 	Modi modi;
 
-	IrRing* ring;
+	SerialReciever* ring;
 
 	Bno055* bno;
 

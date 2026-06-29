@@ -12,7 +12,7 @@ GameMode game(&app);
 Bno055* bno;
 Ssd1306* display;
 ButtonCross* buttonC;
-IrRing* ring;
+SerialReciever* ring;
 
 Motor* motor1;
 Motor* motor2;
@@ -56,11 +56,11 @@ void irSensorCalibration() {
 void testDistanceBall() {
 	ring->update();
 
-	float ringStrenght = ring->getStrength() * 8;
+	float ringStrenght = ring->getValue(2) * 8;
  
 	float distanceRaw = ((1/sqrt(ringStrenght)) * 2000);
 	float distance = (distanceRaw -  65)*2;
-	display->print(distance, 0 ,ring->getStrength());
+	display->print(distance, 0 ,ringStrenght);
 
 	app.getDrivingControl().drive(0, 0.5, 0);
 }
@@ -72,18 +72,30 @@ void ringe() {
 
 void setup() {
 
-	motor1 = app.getOutputManager().getMotorByName(Config::MOTOR_VL_NAME);
-	motor2 = app.getOutputManager().getMotorByName(Config::MOTOR_BA_NAME);
-	motor3 = app.getOutputManager().getMotorByName(Config::MOTOR_VR_NAME);
+	bno = app.getSensorManager().createBno055(255, Config::GYRO_NAME);
+	
+	distRight = app.getSensorManager().createSr04(5,4,Config::RIGHT_DIST_NAME);
+	distLeft = app.getSensorManager().createSr04(29, 28, Config::LEFT_DIST_NAME);
+	distBack = app.getSensorManager().createSr04(27, 26, Config::BACK_DIST_NAME);
 
-	display = app.getOutputManager().getSsd1306ByName(Config::DISPLAY_NAME);
-	bno = app.getSensorManager().getBno055ByName(Config::GYRO_NAME);
-	buttonC = app.getSensorManager().getButtonCrossByName(Config::BUTTON_CROSS_NAME);
-	ring = app.getSensorManager().getIrRingByName(Config::IR_RING_NAME);
+	app.getSensorManager().createIrSensor(2, Config::IR_SENS_LEFT_NAME, 0.0f);
+	app.getSensorManager().createIrSensor(3, Config::IR_SENS_RIGHT_NAME, 0.0f);
 
-	distLeft = app.getSensorManager().getSr04ByName(Config::LEFT_DIST_NAME);
-	distBack = app.getSensorManager().getSr04ByName(Config::BACK_DIST_NAME);
-	distRight = app.getSensorManager().getSr04ByName(Config::RIGHT_DIST_NAME);
+	ring = app.getSensorManager().createSerialReciever(&Serial3, Config::IR_RING_NAME);
+
+	buttonC = app.getSensorManager().createButtonCross(Config::BUTTON_CROSS_NAME, 18, 924, 508, 834, 317, 691);
+
+	app.getSensorManager().createButton(6, Config::GREEN_BUTTON_NAME);
+
+	app.getSensorManager().createEZ(39,Config::EZ_VL_NAME);
+	app.getSensorManager().createEZ(40,Config::EZ_V_NAME);
+	app.getSensorManager().createEZ(41,Config::EZ_VR_NAME);
+
+	display = app.getOutputManager().createSsd1306(Config::DISPLAY_NAME);
+
+	motor1 = app.getOutputManager().createMotor(21, 30, 10, 20, Config::MOTOR_VL_NAME, false);
+	motor2 = app.getOutputManager().createMotor(32, 33, 11, 22, Config::MOTOR_BA_NAME);
+	motor3 =app.getOutputManager().createMotor(36, 38, 12, 23, Config::MOTOR_VR_NAME);
 
 	
 	
